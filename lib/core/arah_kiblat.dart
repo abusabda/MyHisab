@@ -204,5 +204,7 @@ class ArahKiblat {
                 math.pow(math.sin(mf.rad(g)), 2.0));
 
     return s;
+
+    // testing
   }
 }
