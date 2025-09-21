@@ -12,7 +12,7 @@ class MathFunction {
   int sign(double x) => (x > 0) ? 1 : (x < 0 ? -1 : 0);
 
   // Pembulatan umum (seperti extension round di Kotlin)
-  String roundDouble(double value, {int decimals = 2}) {
+  String roundDouble(double value, int decimals) {
     return value.toStringAsFixed(decimals);
   }
 

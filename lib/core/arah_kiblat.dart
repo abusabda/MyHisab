@@ -5,9 +5,9 @@ import 'package:myhisab/core/math_utils.dart';
 import 'package:myhisab/core/sun_function.dart';
 
 class ArahKiblat {
-  final jd = JulianDay();
+  final julianDay = JulianDay();
+  final dynamicalTime = DynamicalTime();
   final mf = MathFunction();
-  final dt = DynamicalTime();
   final sn = SunFunction();
 
   double arahQiblatSpherical(double gLon, double gLat) {
@@ -204,7 +204,223 @@ class ArahKiblat {
                 math.pow(math.sin(mf.rad(g)), 2.0));
 
     return s;
+  }
 
-    // testing
+  double bayanganQiblatHarian(
+    double gLon,
+    double gLat,
+    int tglM,
+    int blnM,
+    int thnM,
+    double tmZn,
+    String azQiblat,
+    int opt,
+  ) {
+    double jd, jde, dm, e, azQ, b, p, ca, bq;
+
+    bq = 12.0;
+
+    for (int i = 1; i <= 3; i++) {
+      jd = julianDay.kmjd(tglM, blnM, thnM, bq, tmZn);
+      jde = jd + dynamicalTime.deltaT(jd) / 86400.0;
+      dm = sn.sunGeocentricDeclination(jde, 0.0);
+      e = sn.equationOfTime(jde, 0.0);
+
+      // Pilih metode azimut kiblat
+      switch (azQiblat.toLowerCase()) {
+        case "ellipsoid":
+          azQ = arahQiblaWithEllipsoidCorrection(gLon, gLat);
+          break;
+        case "vincenty":
+          azQ = arahQiblaVincenty(gLon, gLat, "PtoQ");
+          break;
+        default: // spherical
+          azQ = arahQiblatSpherical(gLon, gLat);
+      }
+
+      b = 90 - gLat;
+
+      p = mf.deg(math.atan(1 / (math.cos(mf.rad(b)) * math.tan(mf.rad(azQ)))));
+      ca = mf.deg(
+        math.acos(
+          math.tan(mf.rad(dm)) * math.tan(mf.rad(b)) * math.cos(mf.rad(p)),
+        ),
+      );
+
+      switch (opt) {
+        case 1:
+          bq = mf.mod(
+            (-(p - ca) / 15) + (12 - e) + ((tmZn * 15) - gLon) / 15,
+            24.0,
+          );
+          break;
+        case 2:
+          bq = mf.mod(
+            (-(p + ca) / 15) + (12 - e) + ((tmZn * 15) - gLon) / 15,
+            24.0,
+          );
+          break;
+        default:
+          bq = 0.0;
+      }
+    }
+
+    return mf.mod(bq, 24.0);
+  }
+
+  String rashdulQiblat(int thnM, double tmZn, int opt) {
+    final double gLatK = 21.0 + 25.0 / 60.0 + 21.02 / 3600.0;
+    final double gLonK = 39.0 + 49.0 / 60.0 + 34.27 / 3600.0;
+    final double tmZnK = 3.0;
+
+    double jd01, jd02, jd03;
+    double jde1, jde2, jde3;
+    double eoT1, eoT2, eoT3;
+    double trs1 = 12.0;
+    double trs2 = 12.0;
+    double trs3 = 12.0;
+    double jdResult = 0.0;
+
+    // Loop bulan
+    bulanLoop:
+    for (int n = 1; n <= 12; n++) {
+      // Loop tanggal
+      for (int i = 1; i <= 31; i++) {
+        for (int z = 1; z <= 3; z++) {
+          jd01 = julianDay.kmjd(i, n, thnM, trs1, tmZnK);
+          jde1 = jd01 + (dynamicalTime.deltaT(jd01) / 86400.0);
+          eoT1 = sn.equationOfTime(jde1, 0.0);
+          trs1 = 12 - eoT1 - (gLonK - (tmZnK * 15)) / 15;
+
+          jd02 = julianDay.kmjd(i + 1, n, thnM, trs2, tmZnK);
+          jde2 = jd02 + (dynamicalTime.deltaT(jd02) / 86400.0);
+          eoT2 = sn.equationOfTime(jde2, 0.0);
+          trs2 = 12 - eoT2 - (gLonK - (tmZnK * 15)) / 15;
+
+          jd03 = julianDay.kmjd(i + 2, n, thnM, trs3, tmZnK);
+          jde3 = jd03 + (dynamicalTime.deltaT(jd03) / 86400.0);
+          eoT3 = sn.equationOfTime(jde3, 0.0);
+          trs3 = 12 - eoT3 - (gLonK - (tmZnK * 15)) / 15;
+        }
+
+        final double jd1 = julianDay.kmjd(i, n, thnM, trs1, tmZnK);
+        final double jd2 = julianDay.kmjd(i + 1, n, thnM, trs2, tmZnK);
+        final double jd3 = julianDay.kmjd(i + 2, n, thnM, trs3, tmZnK);
+
+        final double dS01 = sn.sunGeocentricDeclination(
+          jd1 + dynamicalTime.deltaT(jd1) / 86400.0,
+          0.0,
+        );
+        final double dS02 = sn.sunGeocentricDeclination(
+          jd2 + dynamicalTime.deltaT(jd2) / 86400.0,
+          0.0,
+        );
+        final double dS03 = sn.sunGeocentricDeclination(
+          jd3 + dynamicalTime.deltaT(jd3) / 86400.0,
+          0.0,
+        );
+
+        final double dlt1 = (gLatK - dS01).abs();
+        final double dlt2 = (gLatK - dS02).abs();
+        final double dlt3 = (gLatK - dS03).abs();
+
+        if ((dlt1 > dlt2) && (dlt2 < dlt3)) {
+          jdResult = jd2;
+
+          switch (opt) {
+            case 1:
+              break bulanLoop; // keluar total
+            case 2:
+              continue bulanLoop; // lompat ke bulan berikutnya
+          }
+        }
+      }
+    }
+
+    final double dm = sn.sunGeocentricDeclination(jdResult, 0.0);
+    final double h = 90.0 - (gLatK - dm).abs();
+
+    return "${julianDay.jdkm(jdResult, tmZn)}, "
+        "Jam: ${mf.dhhm(double.parse(julianDay.jdkm(jdResult, tmZn, "JAM DES")), optResult: "HH:MM", minDecPlaces: 0, posNegSign: "")}, "
+        "Tinggi: ${mf.roundTo(h, place: 2)}°, "
+        "Deklinasi: ${mf.dddms(dm, optResult: "DDMMSS", sdp: 0)}";
+  }
+
+  String antipodaKabah(int thnM, double tmZn, int opt) {
+    final double gLatK = -(21.0 + 25.0 / 60.0 + 21.02 / 3600.0);
+    final double gLonK = 39.0 + 49.0 / 60.0 + 34.27 / 3600.0;
+    final double tmZnK = 3.0;
+
+    double jd01, jd02, jd03;
+    double jde1, jde2, jde3;
+    double eoT1, eoT2, eoT3;
+    double trs1 = 24.0;
+    double trs2 = 24.0;
+    double trs3 = 24.0;
+    double jdResult = 0.0;
+
+    // Loop bulan
+    bulanLoop:
+    for (int n = 1; n <= 12; n++) {
+      // Loop tanggal
+      for (int i = 1; i <= 31; i++) {
+        for (int z = 1; z <= 3; z++) {
+          jd01 = julianDay.kmjd(i, n, thnM, trs1, tmZnK);
+          jde1 = jd01 + (dynamicalTime.deltaT(jd01) / 86400.0);
+          eoT1 = sn.equationOfTime(jde1, 0.0);
+          trs1 = 24 - eoT1 - (gLonK - (tmZnK * 15)) / 15;
+
+          jd02 = julianDay.kmjd(i + 1, n, thnM, trs2, tmZnK);
+          jde2 = jd02 + (dynamicalTime.deltaT(jd02) / 86400.0);
+          eoT2 = sn.equationOfTime(jde2, 0.0);
+          trs2 = 24 - eoT2 - (gLonK - (tmZnK * 15)) / 15;
+
+          jd03 = julianDay.kmjd(i + 2, n, thnM, trs3, tmZnK);
+          jde3 = jd03 + (dynamicalTime.deltaT(jd03) / 86400.0);
+          eoT3 = sn.equationOfTime(jde3, 0.0);
+          trs3 = 24 - eoT3 - (gLonK - (tmZnK * 15)) / 15;
+        }
+
+        final double jd1 = julianDay.kmjd(i, n, thnM, trs1, tmZnK);
+        final double jd2 = julianDay.kmjd(i + 1, n, thnM, trs2, tmZnK);
+        final double jd3 = julianDay.kmjd(i + 2, n, thnM, trs3, tmZnK);
+
+        final double dS01 = sn.sunGeocentricDeclination(
+          jd1 + dynamicalTime.deltaT(jd1) / 86400.0,
+          0.0,
+        );
+        final double dS02 = sn.sunGeocentricDeclination(
+          jd2 + dynamicalTime.deltaT(jd2) / 86400.0,
+          0.0,
+        );
+        final double dS03 = sn.sunGeocentricDeclination(
+          jd3 + dynamicalTime.deltaT(jd3) / 86400.0,
+          0.0,
+        );
+
+        final double dlt1 = (gLatK - dS01).abs();
+        final double dlt2 = (gLatK - dS02).abs();
+        final double dlt3 = (gLatK - dS03).abs();
+
+        if ((dlt1 > dlt2) && (dlt2 < dlt3)) {
+          jdResult = jd2;
+
+          switch (opt) {
+            case 1:
+              break bulanLoop; // keluar total
+            case 2:
+              continue bulanLoop; // lompat ke bulan berikutnya
+          }
+        }
+      }
+    }
+
+    final double dm = sn.sunGeocentricDeclination(jdResult, 0.0);
+    final double h = 90.0 - (gLatK - dm).abs();
+
+    return "${julianDay.jdkm(jdResult, tmZn)}, "
+        "Jam: ${mf.dhhm(double.parse(julianDay.jdkm(jdResult, tmZn, "JAM DES")), optResult: "HH:MM", minDecPlaces: 0, posNegSign: "")}, "
+        "Tinggi: ${mf.roundTo(h, place: 2)}°, "
+        "Deklinasi: ${mf.dddms(dm, optResult: "DDMMSS", sdp: 0)}";
   }
 }
