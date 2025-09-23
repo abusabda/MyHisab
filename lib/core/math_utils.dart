@@ -139,58 +139,95 @@ class MathFunction {
   }
 
   // Format derajat DD°MM'SS"
-  String dddms(double dDeg, {String optResult = "DDMMSS", int sdp = 2}) {
-    final uDDeg = dDeg.abs();
-    var uDeg = uDDeg.floorToDouble();
-    final uDMin = (uDDeg - uDeg) * 60.0;
-    var uMin = uDMin.floorToDouble();
-    final uDSec = (uDMin - uMin) * 60.0;
-    var uSec = uDSec.toStringAsFixed(sdp);
+  String dddms(
+    double dDeg, {
+    String optResult = "DDMMSS",
+    int sdp = 2,
+    String posNegSign = "+-",
+  }) {
+    final double uDDeg = dDeg.abs();
+    double uDeg = uDDeg.floorToDouble();
+    final double uDMin = (uDDeg - uDeg) * 60.0;
+    double uMin = uDMin.floorToDouble();
+    final double uDSec = (uDMin - uMin) * 60.0;
+    String uSec = uDSec.toStringAsFixed(sdp);
 
-    // Koreksi overflow detik -> menit
     if (double.parse(uSec) == 60.0) {
       uSec = 0.0.toStringAsFixed(sdp);
-      uMin += 1.0;
+      uMin = uMin + 1.0;
     }
 
-    // Koreksi overflow menit -> derajat
     if (uMin == 60.0) {
       uMin = 0.0;
-      uDeg += 1.0;
+      uDeg = uDeg + 1.0;
     }
 
-    final sDeg = uDeg.toInt().toString().padLeft(3, '0');
-    final sMin = uMin.toInt().toString().padLeft(2, '0');
-    final sSec = double.parse(
-      uSec,
-    ).toStringAsFixed(sdp).padLeft(2 + sdp + 1, '0');
+    final String sDeg = (uDeg.toInt() < 10)
+        ? "00${uDeg.toInt()}"
+        : (uDeg.toInt() < 100)
+        ? "0${uDeg.toInt()}"
+        : "${uDeg.toInt()}";
 
-    final pns = dDeg > 0.0
-        ? "+"
-        : dDeg < 0.0
-        ? "-"
-        : "";
-    final bbbt = dDeg > 0.0 ? "BT" : "BB";
-    final luls = dDeg > 0.0 ? "LU" : "LS";
+    final String sMin = (uMin.toInt() < 10)
+        ? "0${uMin.toInt()}"
+        : "${uMin.toInt()}";
+
+    final String sSec = (double.parse(uSec) < 10.0) ? "0$uSec" : uSec;
+
+    // --- PNS sesuai aturan PosNegSign ---
+    final String pns;
+    if (posNegSign == "+-") {
+      if (dDeg > 0.0) {
+        pns = "+";
+      } else if (dDeg < 0.0) {
+        pns = "-";
+      } else {
+        pns = "";
+      }
+    } else {
+      if (dDeg > 0.0) {
+        pns = "";
+      } else if (dDeg < 0.0) {
+        pns = "-";
+      } else {
+        pns = "";
+      }
+    }
+
+    final String bbbt;
+    final String luls;
+
+    if (dDeg > 0.0) {
+      bbbt = "BT";
+      luls = "LU";
+    } else {
+      bbbt = "BB";
+      luls = "LS";
+    }
 
     switch (optResult) {
       case "DDMMSS":
-        return "$pns$sDeg° $sMin' $sSec\"";
+        return "$pns$sDeg° $sMin’ $sSec”";
       case "MMSS":
-        return "$pns$sMin' $sSec\"";
+        return "$pns$sMin’ $sSec”";
       case "SS":
-        return "$pns$sSec\"";
+        return "$pns$sSec”";
       case "BBBT":
-        return "$pns$sDeg° $sMin' $sSec\" $bbbt";
+        return "$pns$sDeg° $sMin’ $sSec” $bbbt";
       case "LULS":
-        return "$pns$sDeg° $sMin' $sSec\" $luls";
+        return "$pns$sDeg° $sMin’ $sSec” $luls";
       default:
-        return "$pns$sDeg° $sMin' $sSec\"";
+        return "$pns$sDeg° $sMin’ $sSec”";
     }
   }
 
   // Format derajat versi 2 (DDDMS2)
-  String dddms2(double dDeg, {String optResult = "DDMMSS", int sdp = 2}) {
+  String dddms2(
+    double dDeg, {
+    String optResult = "DDMMSS",
+    int sdp = 2,
+    posNegSign = "+-",
+  }) {
     final uDDeg = dDeg.abs();
     String uDeg = (uDDeg.floor()).toStringAsFixed(0);
     final uDMin = (uDDeg - double.parse(uDeg)) * 60.0;
@@ -207,7 +244,26 @@ class MathFunction {
       uDeg = (double.parse(uDeg) + 1).toStringAsFixed(0);
     }
 
-    final pns = (dDeg > 0) ? "+" : (dDeg < 0 ? "-" : "");
+    // --- PNS sesuai aturan PosNegSign ---
+    final String pns;
+    if (posNegSign == "+-") {
+      if (dDeg > 0.0) {
+        pns = "+";
+      } else if (dDeg < 0.0) {
+        pns = "-";
+      } else {
+        pns = "";
+      }
+    } else {
+      if (dDeg > 0.0) {
+        pns = "";
+      } else if (dDeg < 0.0) {
+        pns = "-";
+      } else {
+        pns = "";
+      }
+    }
+
     final bbbt = (dDeg > 0) ? "BT" : "BB";
     final luls = (dDeg > 0) ? "LU" : "LS";
 

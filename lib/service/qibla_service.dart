@@ -16,13 +16,13 @@ void main() {
 
   // Cetak
   print(
-    "Arah Kiblat Spherical      : ${mf.dddms(aq.arahQiblatSpherical(gLon, gLat))}",
+    "Arah Kiblat Spherical      : ${mf.dddms(aq.arahQiblatSpherical(gLon, gLat), optResult: "DDMMSS", sdp: sdp, posNegSign: "")}",
   );
   print(
-    "Arah Kiblat Ellipsoid      : ${mf.dddms(aq.arahQiblaWithEllipsoidCorrection(gLon, gLat))}",
+    "Arah Kiblat Ellipsoid      : ${mf.dddms(aq.arahQiblaWithEllipsoidCorrection(gLon, gLat), optResult: "DDMMSS", sdp: sdp, posNegSign: "")}",
   );
   print(
-    "Arah Kiblat Vincenty       : ${mf.dddms(aq.arahQiblaVincenty(gLon, gLat, 'PtoQ'))}",
+    "Arah Kiblat Vincenty       : ${mf.dddms(aq.arahQiblaVincenty(gLon, gLat, 'PtoQ'), optResult: "DDMMSS", sdp: sdp, posNegSign: "")}",
   );
 
   print(
