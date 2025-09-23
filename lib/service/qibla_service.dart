@@ -36,11 +36,11 @@ void main() {
   );
 
   print(
-    "Bayangan Kiblat 1          : ${mf.dhhms(aq.bayanganQiblatHarian(gLon, gLat, tglM, blnM, thnM, tmZn, "spherical", 1), optResult: 'HH:MM:SS', secDecPlaces: sdp, posNegSign: "")}",
+    "Bayangan Kiblat 1          : ${mf.dhhms(aq.bayanganQiblatHarian(gLon, gLat, tglM, blnM, thnM, tmZn, "spherical", 1), optResult: 'HH:MM:SS', secDecPlaces: 0, posNegSign: "")}",
   );
 
   print(
-    "Bayangan Kiblat 2          : ${mf.dhhms(aq.bayanganQiblatHarian(gLon, gLat, tglM, blnM, thnM, tmZn, "spherical", 2), optResult: 'HH:MM:SS', secDecPlaces: sdp, posNegSign: "")}",
+    "Bayangan Kiblat 2          : ${mf.dhhms(aq.bayanganQiblatHarian(gLon, gLat, tglM, blnM, thnM, tmZn, "spherical", 2), optResult: 'HH:MM:SS', secDecPlaces: 0, posNegSign: "")}",
   );
 
   print("Rashdul Qiblat 1           : ${aq.rashdulQiblat(thnM, tmZn, 1)}");
