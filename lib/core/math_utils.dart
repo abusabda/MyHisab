@@ -226,25 +226,35 @@ class MathFunction {
     double dDeg, {
     String optResult = "DDMMSS",
     int sdp = 2,
-    posNegSign = "+-",
+    String posNegSign = "", // "" atau "+-"
   }) {
-    final uDDeg = dDeg.abs();
+    // Nilai absolut untuk dihitung
+    final double uDDeg = dDeg.abs();
+
+    // Derajat
     String uDeg = (uDDeg.floor()).toStringAsFixed(0);
-    final uDMin = (uDDeg - double.parse(uDeg)) * 60.0;
+
+    // Menit
+    double uDMin = (uDDeg - double.parse(uDeg)) * 60.0;
     String uMin = (uDMin.floor()).toStringAsFixed(0);
-    final uDSec = (uDMin - double.parse(uMin)) * 60.0;
+
+    // Detik
+    double uDSec = (uDMin - double.parse(uMin)) * 60.0;
     String uSec = uDSec.toStringAsFixed(sdp);
 
+    // Koreksi pembulatan detik -> menit
     if (double.parse(uSec) == 60.0) {
       uSec = 0.0.toStringAsFixed(sdp);
-      uMin = (double.parse(uMin) + 1).toStringAsFixed(0);
-    }
-    if (double.parse(uMin) == 60.0) {
-      uMin = "0";
-      uDeg = (double.parse(uDeg) + 1).toStringAsFixed(0);
+      uMin = (double.parse(uMin) + 1.0).toStringAsFixed(0);
     }
 
-    // --- PNS sesuai aturan PosNegSign ---
+    // Koreksi pembulatan menit -> derajat
+    if (double.parse(uMin) == 60.0) {
+      uMin = "0";
+      uDeg = (double.parse(uDeg) + 1.0).toStringAsFixed(0);
+    }
+
+    // Tanda Positif/Negatif sesuai pilihan
     final String pns;
     if (posNegSign == "+-") {
       if (dDeg > 0.0) {
@@ -264,9 +274,11 @@ class MathFunction {
       }
     }
 
-    final bbbt = (dDeg > 0) ? "BT" : "BB";
-    final luls = (dDeg > 0) ? "LU" : "LS";
+    // BT/BB dan LU/LS
+    final String bbbt = (dDeg > 0.0) ? "BT" : "BB";
+    final String luls = (dDeg > 0.0) ? "LU" : "LS";
 
+    // Hasil sesuai OptResult
     switch (optResult) {
       case "DDMMSS":
         return "$pns$uDeg° $uMin’ $uSec”";
