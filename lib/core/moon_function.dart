@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'package:myhisab/service/sun_service.dart';
+
 import 'moon_longitude.dart';
 import 'moon_latitude.dart';
 import 'moon_distance.dart';
@@ -1068,7 +1070,7 @@ class MoonFunction {
     }
   }
 
-  double? moonTransitRiseSet(
+  dynamic moonTransitRiseSet(
     int tglM,
     int blnM,
     int thnM,
@@ -1079,22 +1081,37 @@ class MoonFunction {
     String trsType,
     int maxItr,
   ) {
-    double jd00UT = jd.kmjd(tglM, blnM, thnM, tmZn, tmZn) - 1;
-    double jd00LT = 0.0;
-    double jde00UT = 0.0;
-    double alphaMm1d = 0.0, alphaM00d = 0.0, alphaMp1d = 0.0;
-    double deltaMm1d = 0.0, deltaM00d = 0.0, deltaMp1d = 0.0;
-    double pi = 0.0, h0 = 0.0, cosHA0 = 0.0;
-    double t = 0.0, theta0 = 0.0, m = 0.0;
-    double sTheta0 = 0.0, nT = 0.0, alphaM = 0.0, deltaM = 0.0;
-    double ha = 0.0, h = 0.0, dltm = 0.0, jdTRS = 0.0;
-
-    dynamic ha0;
+    double jd00LT;
+    double jd00UT;
+    double jde00UT;
+    double alphaMm1d;
+    double alphaM00d;
+    double alphaMp1d;
+    double deltaMm1d;
+    double deltaM00d;
+    double deltaMp1d;
+    double pi;
+    double h0;
+    double cosHA0;
+    dynamic ha0; // bisa double atau "circumpolar"
+    double t;
+    double theta0;
+    double m;
+    double sTheta0 = 0.0;
+    double nT;
+    double alphaM = 0.0;
+    double deltaM = 0.0;
+    double ha;
+    double h;
+    double dltm = 0.0;
+    double jdTRS;
     dynamic ttrs = 0.0;
 
-    for (int dItr = 1; dItr <= 3; dItr++) {
-      jde00UT = jd00UT + dt.deltaT(jd00UT) / 86400.0;
+    // hitung JD 00UT
+    jd00UT = jd.kmjd(tglM, blnM, thnM, tmZn, tmZn) + -1;
 
+    for (int dItr = 1; dItr <= 3; dItr++) {
+      jde00UT = jd00UT + dynamicalTime.deltaT(jd00UT) / 86400.0;
       alphaM00d = moonGeocentricRightAscension(jde00UT, 0.0);
       alphaMm1d = moonGeocentricRightAscension(jde00UT, 0.0 - 1);
       alphaMp1d = moonGeocentricRightAscension(jde00UT, 0.0 + 1);
@@ -1120,15 +1137,15 @@ class MoonFunction {
       if (cosHA0.abs() <= 1) {
         ha0 = mf.deg(math.acos(cosHA0));
       } else {
-        ha0 = "!circumpolar";
+        ha0 = "circumpolar";
       }
 
       t = (jde00UT - 2451545) / 36525.0;
 
       theta0 =
           100.46061837 +
-          (36000.770053608 * t) +
-          (0.000387933 * t * t) -
+          36000.770053608 * t +
+          0.000387933 * t * t -
           (math.pow(t, 3.0) / 38710000) +
           (nt.nutationInLongitude(jde00UT, 0.0) *
               math.cos(mf.rad(nt.trueObliquityOfEcliptic(jde00UT, 0.0))));
@@ -1141,10 +1158,18 @@ class MoonFunction {
         case "TRANSIT":
           break;
         case "RISE":
-          m = m - ha0.toDouble() / 360.0;
+          if (ha0 is double) {
+            m = m - ha0 / 360.0;
+          } else {
+            return "circumpolar";
+          }
           break;
         case "SET":
-          m = m + ha0.toDouble() / 360.0;
+          if (ha0 is double) {
+            m = m + ha0 / 360.0;
+          } else {
+            return "circumpolar";
+          }
           break;
       }
 
@@ -1153,8 +1178,8 @@ class MoonFunction {
       for (int itr = 1; itr <= maxItr; itr++) {
         sTheta0 = theta0 + 360.985647 * m;
         sTheta0 = mf.mod(sTheta0, 360.0);
-
         nT = m;
+
         alphaM = mf.mod(
           alphaM00d +
               nT /
@@ -1214,11 +1239,11 @@ class MoonFunction {
       }
 
       jdTRS = jd00UT + m;
-      jd00LT = jd.kmjd(tglM, blnM, thnM, 0.0, tmZn);
-      ttrs = jd.jdkm(jdTRS, tmZn, "JAMDES");
+      jd00LT = julianDay.kmjd(tglM, blnM, thnM, 0.0, tmZn);
+      ttrs = julianDay.jdkm(jdTRS, tmZn, "JAMDES");
 
-      if ((jdTRS >= (jd00LT + 0)) && (jdTRS <= (jd00LT + 1))) {
-        ttrs = jd.jdkm(jdTRS, tmZn, "JAMDES");
+      if (jdTRS >= (jd00LT + 0) && jdTRS <= (jd00LT + 1)) {
+        ttrs = julianDay.jdkm(jdTRS, tmZn, "JAMDES");
       } else {
         jd00UT = jd00UT + 1;
         ttrs = "x";
