@@ -1024,7 +1024,7 @@ class MoonFunction {
     double elev,
     String optR,
   ) {
-    double jdNMTopo = 0.0;
+    var jdNMTopo = 0.0;
     double jdNM = moonPhasesModified(hijriMonth, hijriYear, 1);
 
     double x1 = jdNM - 1 / 24.0;
@@ -1045,7 +1045,8 @@ class MoonFunction {
     double b = y3 - y2;
     double c = b - a;
 
-    double n0 = 0.0;
+    var n0 = 0.0;
+    n0 = -2 * y2 / (a + b + c * n0);
 
     for (int i = 1; i <= 2; i++) {
       n0 = -2 * y2 / (a + b + c * n0);
@@ -1243,7 +1244,7 @@ class MoonFunction {
       ttrs = julianDay.jdkm(jdTRS, tmZn, "JAMDES");
 
       if (jdTRS >= (jd00LT + 0) && jdTRS <= (jd00LT + 1)) {
-        ttrs = julianDay.jdkm(jdTRS, tmZn, "JAMDES");
+        ttrs = double.parse(julianDay.jdkm(jdTRS, tmZn, "JAMDES"));
       } else {
         jd00UT = jd00UT + 1;
         ttrs = "x";
