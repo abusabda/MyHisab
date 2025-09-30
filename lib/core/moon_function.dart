@@ -1071,7 +1071,7 @@ class MoonFunction {
     }
   }
 
-  dynamic moonTransitRiseSet(
+  double moonTransitRiseSet(
     int tglM,
     int blnM,
     int thnM,
@@ -1094,7 +1094,7 @@ class MoonFunction {
     double pi;
     double h0;
     double cosHA0;
-    dynamic ha0; // bisa double atau "circumpolar"
+    double ha0; // bisa double atau "circumpolar"
     double t;
     double theta0;
     double m;
@@ -1106,16 +1106,15 @@ class MoonFunction {
     double h;
     double dltm = 0.0;
     double jdTRS;
-    dynamic ttrs = 0.0;
+    double ttrs = 0.0;
 
-    // hitung JD 00UT
     jd00UT = jd.kmjd(tglM, blnM, thnM, tmZn, tmZn) + -1;
 
     for (int dItr = 1; dItr <= 3; dItr++) {
-      jde00UT = jd00UT + dynamicalTime.deltaT(jd00UT) / 86400.0;
+      jde00UT = jd00UT + dt.deltaT(jd00UT) / 86400.0;
       alphaM00d = moonGeocentricRightAscension(jde00UT, 0.0);
-      alphaMm1d = moonGeocentricRightAscension(jde00UT, 0.0 - 1);
-      alphaMp1d = moonGeocentricRightAscension(jde00UT, 0.0 + 1);
+      alphaMm1d = moonGeocentricRightAscension(jde00UT - 1, 0);
+      alphaMp1d = moonGeocentricRightAscension(jde00UT + 1, 0);
 
       if (trsType == "TRANSIT") {
         deltaM00d = 0.0;
@@ -1123,8 +1122,8 @@ class MoonFunction {
         deltaMp1d = 0.0;
       } else {
         deltaM00d = moonGeocentricDeclination(jde00UT, 0.0);
-        deltaMm1d = moonGeocentricDeclination(jde00UT, 0.0 - 1);
-        deltaMp1d = moonGeocentricDeclination(jde00UT, 0.0 + 1);
+        deltaMm1d = moonGeocentricDeclination(jde00UT - 1, 0);
+        deltaMp1d = moonGeocentricDeclination(jde00UT + 1, 0);
       }
 
       pi = moonEquatorialHorizontalParallax(jde00UT, 0.0);
@@ -1135,18 +1134,18 @@ class MoonFunction {
               math.sin(mf.rad(gLat)) * math.sin(mf.rad(deltaM00d))) /
           (math.cos(mf.rad(gLat)) * math.cos(mf.rad(deltaM00d)));
 
-      if (cosHA0.abs() <= 1) {
+      if ((cosHA0).abs() <= 1) {
         ha0 = mf.deg(math.acos(cosHA0));
       } else {
-        ha0 = "circumpolar";
+        ha0 = 0.0;
       }
 
       t = (jde00UT - 2451545) / 36525.0;
 
       theta0 =
-          100.46061837 +
-          36000.770053608 * t +
-          0.000387933 * t * t -
+          (100.46061837) +
+          (36000.770053608 * t) +
+          (0.000387933 * t * t) -
           (math.pow(t, 3.0) / 38710000) +
           (nt.nutationInLongitude(jde00UT, 0.0) *
               math.cos(mf.rad(nt.trueObliquityOfEcliptic(jde00UT, 0.0))));
@@ -1157,20 +1156,13 @@ class MoonFunction {
 
       switch (trsType) {
         case "TRANSIT":
+          m = m;
           break;
         case "RISE":
-          if (ha0 is double) {
-            m = m - ha0 / 360.0;
-          } else {
-            return "circumpolar";
-          }
+          m = m - ha0 / 360.0;
           break;
         case "SET":
-          if (ha0 is double) {
-            m = m + ha0 / 360.0;
-          } else {
-            return "circumpolar";
-          }
+          m = m + ha0 / 360.0;
           break;
       }
 
@@ -1180,7 +1172,6 @@ class MoonFunction {
         sTheta0 = theta0 + 360.985647 * m;
         sTheta0 = mf.mod(sTheta0, 360.0);
         nT = m;
-
         alphaM = mf.mod(
           alphaM00d +
               nT /
@@ -1206,6 +1197,7 @@ class MoonFunction {
         }
 
         ha = sTheta0 + gLon - alphaM;
+
         if (mf.mod(ha, 360.0) > 180.0) {
           ha = mf.mod(ha, 360.0) - 360.0;
         } else {
@@ -1240,17 +1232,16 @@ class MoonFunction {
       }
 
       jdTRS = jd00UT + m;
-      jd00LT = julianDay.kmjd(tglM, blnM, thnM, 0.0, tmZn);
-      ttrs = julianDay.jdkm(jdTRS, tmZn, "JAMDES");
+      jd00LT = jd.kmjd(tglM, blnM, thnM, 0.0, tmZn);
+      ttrs = double.parse(jd.jdkm(jdTRS, tmZn, "JAMDES"));
 
-      if (jdTRS >= (jd00LT + 0) && jdTRS <= (jd00LT + 1)) {
-        ttrs = double.parse(julianDay.jdkm(jdTRS, tmZn, "JAMDES"));
+      if ((jdTRS >= (jd00LT + 0)) && (jdTRS <= (jd00LT + 1))) {
+        ttrs = double.parse(jd.jdkm(jdTRS, tmZn, "JAMDES"));
       } else {
         jd00UT = jd00UT + 1;
-        ttrs = "x";
+        ttrs = 0.0;
       }
     }
-
     return ttrs;
   }
 }

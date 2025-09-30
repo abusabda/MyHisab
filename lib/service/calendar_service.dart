@@ -100,13 +100,15 @@ void main() {
     elev,
     tmZn,
     "SET",
-    2,
+    3,
   );
 
-  dynamic jdMSet;
-  dynamic jamMSet;
+  double jdMSet;
+  String jamMSet;
 
-  if (mSet is double) {
+  if (mSet == 0.0) {
+    jdMSet = 0.0;
+  } else {
     jdMSet = julianDay.kmjd(tglM, blnM, thnM, 0.0, 0.0) + (mSet - tmZn) / 24.0;
     jamMSet = mf.dhhms(
       double.parse(julianDay.jdkm(jdMSet, tmZn, "JamDes")),
@@ -114,9 +116,6 @@ void main() {
       secDecPlaces: 0,
       posNegSign: "",
     );
-  } else {
-    jdMSet = "Sirkompular";
-    jamMSet = "sirkompular";
   }
 
   final double bTime = jamGS + 4 / 9.0 * ((jdMSet - jd) * 24.0);
@@ -278,7 +277,10 @@ void main() {
     "Ghurub Matahari            : ${mf.dhhms(double.parse(julianDay.jdkm(jd, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
   );
 
-  print("Ghurub Bulan               : $jamMSet");
+  print(
+    "Ghurub Bulan               : ${mf.dhhms(double.parse(julianDay.jdkm(jdMSet, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
+  );
+
   print("Kriteria                   : $kr1");
   print("Status                     : $kr");
   print("Awal Bulan                 : ${julianDay.jdkm(abq, tmZn)}");
@@ -503,7 +505,11 @@ void main() {
   print(
     "Best Time                        : ${mf.dhhms(bTime, optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
   );
-  print("Range q Odeh                     : $qOdeh.toStringAsFixed(3)");
+  print("Range q Odeh                     : $qOdeh");
 
   print("moonset                          : ${mf.dhhms(mSet)}");
+
+  print(
+    "tglM : $tglM, blnM : $blnM, thnM : $thnM, gLon : $gLon, gLat : $gLat, elev : $elev, tmZn : $tmZn",
+  );
 }
