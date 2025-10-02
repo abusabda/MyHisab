@@ -159,13 +159,6 @@ void main() {
           6.3226 * (tCw * 60) +
           7.1651);
 
-  // final qOdeh =
-  //     relAltTop -
-  //     (-0.1018 * ((tCw * 60) * (tCw * 60) * (tCw * 60)) +
-  //         0.7319 * ((tCw * 60) * (tCw * 60)) -
-  //         6.3226 * (tCw * 60) +
-  //         7.1651);
-
   //Tinggi Hilal dan Elongasi
   final double tHilal1 = mo.moonGeocentricAltitude(jdGS, dltT, gLon, gLat);
   final double elong01 = mo.moonSunGeocentricElongation(jdGS, dltT);
@@ -259,34 +252,32 @@ void main() {
   // ===================
   // OUTPUT
   // ===================
-  print("Perhitungan Awal Bulan     : $nmBlnH $thnH H");
-  print("Lokasi                     : $nmL");
+  print("Perhitungan Awal Bulan           : $nmBlnH $thnH H");
+  print("Lokasi                           : $nmL");
   print(
-    "Garis Bujur                : ${mf.dddms(gLon, optResult: "BBBT", sdp: sdp, posNegSign: "")}",
+    "Koordinat                        : ${mf.dddms(gLon, optResult: "BBBT", sdp: sdp, posNegSign: "+-")} | ${mf.dddms2(gLat, optResult: "LULS", sdp: sdp, posNegSign: "")}",
   );
+  print("Elevasi                          : ${elev.toStringAsFixed(3)} Mdpl");
+
   print(
-    "Garis Lintang              : ${mf.dddms2(gLat, optResult: "LULS", sdp: sdp, posNegSign: "")}",
+    "Ijtimak Geosentris               : ${julianDay.jdkm(jdNM2)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM2, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM4)}",
   );
 
   print(
-    "Ijtimak Geosentris         : ${julianDay.jdkm(jdNM2)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM2, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM4)}",
+    "Ijtimak Toposentris              : ${julianDay.jdkm(jdNM3)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM3, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM5)}",
   );
 
   print(
-    "Ijtimak Toposentris        : ${julianDay.jdkm(jdNM3)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM3, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM5)}",
+    "Gurub Matahari                   : ${mf.dhhms(double.parse(julianDay.jdkm(jd, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
   );
 
   print(
-    "Ghurub Matahari            : ${mf.dhhms(double.parse(julianDay.jdkm(jd, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
+    "Gurub Bulan                      : ${mf.dhhms(double.parse(julianDay.jdkm(jdMSet, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
   );
 
-  print(
-    "Ghurub Bulan               : ${mf.dhhms(double.parse(julianDay.jdkm(jdMSet, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
-  );
-
-  print("Kriteria                   : $kr1");
-  print("Status                     : $kr");
-  print("Awal Bulan                 : ${julianDay.jdkm(abq, tmZn)}");
+  print("Kriteria                         : $kr1");
+  print("Status                           : $kr");
+  print("Awal Bulan                       : ${julianDay.jdkm(abq, tmZn)}");
 
   print("=============================================================");
   print(
