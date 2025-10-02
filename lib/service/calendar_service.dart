@@ -160,14 +160,27 @@ void main() {
           7.1651);
 
   //Tinggi Hilal dan Elongasi
-  final double tHilal1 = mo.moonGeocentricAltitude(jdGS, dltT, gLon, gLat);
+  final double tHilal1 = mo.moonTopocentricAltitude(
+    jdGS,
+    dltT,
+    gLon,
+    gLat,
+    elev,
+    pres,
+    temp,
+    "htoc",
+  ); // JD Ijtimak
   final double elong01 = mo.moonSunGeocentricElongation(jdGS, dltT);
 
-  final double tHilal2 = mo.moonGeocentricAltitude(
+  final double tHilal2 = mo.moonTopocentricAltitude(
     jd,
     dltT,
     gLon,
     gLat,
+    elev,
+    pres,
+    temp,
+    "htoc",
   ); // JD Ijtimak Tambah hari
 
   final double elong02 = mo.moonSunGeocentricElongation(
