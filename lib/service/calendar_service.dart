@@ -100,22 +100,15 @@ void main() {
     elev,
     tmZn,
     "SET",
-    3,
+    2,
   );
 
   double jdMSet;
-  String jamMSet;
 
   if (mSet == 0.0) {
     jdMSet = 0.0;
   } else {
     jdMSet = julianDay.kmjd(tglM, blnM, thnM, 0.0, 0.0) + (mSet - tmZn) / 24.0;
-    jamMSet = mf.dhhms(
-      double.parse(julianDay.jdkm(jdMSet, tmZn, "JamDes")),
-      optResult: "HH:MM:SS",
-      secDecPlaces: 0,
-      posNegSign: "",
-    );
   }
 
   final double bTime = jamGS + 4 / 9.0 * ((jdMSet - jd) * 24.0);
@@ -126,7 +119,10 @@ void main() {
 
   final tCw =
       (mo.moonTopocentricSemidiameter(jd, dltT, gLon, gLat, elev)) *
-      (1 - math.cos(mf.rad(mo.moonSunGeocentricElongation(jd, dltT))));
+      (1 -
+          math.cos(
+            mf.rad(mo.moonSunTopocentricElongation(jd, dltT, gLon, gLat, elev)),
+          ));
 
   final relAltGeo =
       mo.moonGeocentricAltitude(jd, dltT, gLon, gLat) +
@@ -162,6 +158,13 @@ void main() {
           0.7319 * math.pow((tCw * 60), 2.0) -
           6.3226 * (tCw * 60) +
           7.1651);
+
+  // final qOdeh =
+  //     relAltTop -
+  //     (-0.1018 * ((tCw * 60) * (tCw * 60) * (tCw * 60)) +
+  //         0.7319 * ((tCw * 60) * (tCw * 60)) -
+  //         6.3226 * (tCw * 60) +
+  //         7.1651);
 
   //Tinggi Hilal dan Elongasi
   final double tHilal1 = mo.moonGeocentricAltitude(jdGS, dltT, gLon, gLat);
@@ -503,13 +506,15 @@ void main() {
   );
   print("T.Crescent Width                 : ${mf.dddms(tCw)}");
   print(
-    "Best Time                        : ${mf.dhhms(bTime, optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
+    "Best Time                        : ${mf.dhhms(bTime, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")}",
   );
-  print("Range q Odeh                     : $qOdeh");
-
-  print("moonset                          : ${mf.dhhms(mSet)}");
+  print("Range q Odeh                     : ${mf.roundTo(qOdeh, place: 2)}");
 
   print(
-    "tglM : $tglM, blnM : $blnM, thnM : $thnM, gLon : $gLon, gLat : $gLat, elev : $elev, tmZn : $tmZn",
+    "Terbenam Bulan                   : ${mf.dhhms(mSet, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")} ",
   );
+
+  // print(
+  //   "tglM : $tglM, blnM : $blnM, thnM : $thnM, gLon : $gLon, gLat : $gLat, elev : $elev, tmZn : $tmZn",
+  // );
 }

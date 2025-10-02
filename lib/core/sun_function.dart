@@ -829,7 +829,7 @@ class SunFunction {
         kwd = gLon / 15.0 - tmZn;
         jSunSet = haS / 15.0 + 12.0 - eoT - kwd;
       } else {
-        jSunSet = double.nan;
+        jSunSet = 0.0;
       }
     }
 

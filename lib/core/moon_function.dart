@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:myhisab/service/sun_service.dart';
+//import 'package:myhisab/service/sun_service.dart';
 
 import 'moon_longitude.dart';
 import 'moon_latitude.dart';
@@ -1085,25 +1085,25 @@ class MoonFunction {
     double jd00LT;
     double jd00UT;
     double jde00UT;
-    double alphaMm1d;
-    double alphaM00d;
-    double alphaMp1d;
-    double deltaMm1d;
-    double deltaM00d;
-    double deltaMp1d;
+    double alphaMm1d = 0.0;
+    double alphaM00d = 0.0;
+    double alphaMp1d = 0.0;
+    double deltaMm1d = 0.0;
+    double deltaM00d = 0.0;
+    double deltaMp1d = 0.0;
     double pi;
-    double h0;
+    double h0 = 0.0;
     double cosHA0;
     double ha0; // bisa double atau "circumpolar"
     double t;
-    double theta0;
-    double m;
+    double theta0 = 0.0;
+    double m = 0.0;
     double sTheta0 = 0.0;
-    double nT;
+    double nT = 0.0;
     double alphaM = 0.0;
     double deltaM = 0.0;
-    double ha;
-    double h;
+    double ha = 0.0;
+    double h = 0.0;
     double dltm = 0.0;
     double jdTRS;
     double ttrs = 0.0;
