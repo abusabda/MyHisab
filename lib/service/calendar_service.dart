@@ -25,12 +25,12 @@ void main() {
   final String nmL = "Pelabuhanratu";
   final int blnH = 10;
   final int thnH = 1444;
-  final double gLon = (106 + 33 / 60.0 + 27.8 / 3600.0);
-  final double gLat = -(7 + 1 / 60.0 + 44.6 / 3600.0);
-  final double tmZn = 7.0;
+  final double gLon = (106 + 33 / 60 + 27.8 / 3600);
+  final double gLat = -(7 + 1 / 60 + 44.6 / 3600);
+  final double tmZn = 7;
   final double elev = 52.685;
-  final double pres = 1010.0;
-  final double temp = 10.0;
+  final double pres = 1010;
+  final double temp = 10;
   final int sdp = 2;
   final int tbhHari = 0;
   final int optional = 1; // 1 = Imkan Rukyat, 2 = Wujudul Hilal
@@ -59,7 +59,7 @@ void main() {
 
   final double jamGS = double.parse(
     julianDay.jdkm(
-      sn.jdGhurubSyams(jdNM + tbhHari, gLat, gLon, elev, tmZn),
+      sn.jdGhurubSyams(jd, gLat, gLon, elev, tmZn),
       tmZn,
       "JAMDES",
     ),
@@ -108,10 +108,10 @@ void main() {
   if (mSet == 0.0) {
     jdMSet = 0.0;
   } else {
-    jdMSet = julianDay.kmjd(tglM, blnM, thnM, 0.0, 0.0) + (mSet - tmZn) / 24.0;
+    jdMSet = julianDay.kmjd(tglM, blnM, thnM, 0.0, 0.0) + (mSet - tmZn) / 24;
   }
 
-  final double bTime = jamGS + 4 / 9.0 * ((jdMSet - jd) * 24.0);
+  final double bTime = jamGS + 4 / 9.0 * ((jdMSet - jd) * 24);
 
   final gCw =
       (mo.moonGeocentricSemidiameter(jd, dltT)) *
@@ -154,8 +154,8 @@ void main() {
 
   final qOdeh =
       relAltTop -
-      (-0.1018 * math.pow((tCw * 60), 3.0) +
-          0.7319 * math.pow((tCw * 60), 2.0) -
+      (-0.1018 * math.pow((tCw * 60), 3) +
+          0.7319 * math.pow((tCw * 60), 2) -
           6.3226 * (tCw * 60) +
           7.1651);
 
@@ -210,7 +210,7 @@ void main() {
     iRP1 = "Not Visible"; // belum bisa terlihat
   }
 
-  iRP2 = (tHilal2 >= 3.0 && elong02 >= 6.4) ? "Visible" : "Not Visible";
+  iRP2 = (tHilal2 >= 3 && elong02 >= 6.4) ? "Visible" : "Not Visible";
 
   // Wujudul Hilal Muhammadiyah
   if (tHilal1 > 0.0) {
@@ -235,12 +235,12 @@ void main() {
   // Tampilkan pilihan Kriteria dan hasil akhir kriteria
   if (optional == 1) {
     // pilihan imkan rukyat
-    abq = ((jdNM2 + 0.5 + tmZn / 24.0).floor() - tmZn / 24.0) + iR01;
+    abq = ((jdNM2 + 0.5 + tmZn / 24).floor() - tmZn / 24.0) + iR01;
     kr = visb;
     kr1 = "Imkan Rukyat";
   } else {
     // pilihan wujudul hilal
-    abq = ((jdNM2 + 0.5 + tmZn / 24.0).floor() - tmZn / 24.0) + wH01;
+    abq = ((jdNM2 + 0.5 + tmZn / 24).floor() - tmZn / 24.0) + wH01;
     kr = wh;
     kr1 = "Wujudul Hilal";
   }
@@ -271,6 +271,12 @@ void main() {
     "Koordinat                        : ${mf.dddms(gLon, optResult: "BBBT", sdp: sdp, posNegSign: "+-")} | ${mf.dddms2(gLat, optResult: "LULS", sdp: sdp, posNegSign: "")}",
   );
   print("Elevasi                          : ${elev.toStringAsFixed(3)} Mdpl");
+  print("Time Zone                        : $tmZn jam");
+  print("Saat perhitungan                 : ${julianDay.jdkm(jd)} | JD: $jd");
+  print("Delta T                          : ${dltT.toStringAsFixed(2)}s");
+  print(
+    "Algoritma                        : VSOP87D & ELP/MPP02, dengan 38.326 suku koreksi",
+  );
 
   print(
     "Ijtimak Geosentris               : ${julianDay.jdkm(jdNM2)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM2, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM4)}",
@@ -281,11 +287,11 @@ void main() {
   );
 
   print(
-    "Gurub Matahari                   : ${mf.dhhms(double.parse(julianDay.jdkm(jd, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
+    "Gurub Matahari                   : ${jamGS != 0.0 ? "${mf.dhhms(jamGS, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")} $wd" : "sirkompular"}",
   );
 
   print(
-    "Gurub Bulan                      : ${mf.dhhms(double.parse(julianDay.jdkm(jdMSet, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: 0, posNegSign: "")}",
+    "Gurub Bulan                      : ${mSet != 0.0 ? "${mf.dhhms(mSet, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")} $wd" : "sirkompular"}",
   );
 
   print("Kriteria                         : $kr1");
@@ -297,8 +303,7 @@ void main() {
     "Data Matahari ${julianDay.jdkm(jdNM2)} jam: ${mf.dhhms(double.parse(julianDay.jdkm(jd, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd",
   );
   print("=============================================================");
-  print("Julian Day                       : $jd");
-  print("Delta T                          : ${dltT.toStringAsFixed(2)}s");
+
   print(
     "G.Longitude (True)               : ${mf.dddms(sn.sunGeocentricLongitude(jd, dltT, "True"))}",
   );
@@ -510,15 +515,7 @@ void main() {
   );
   print("T.Crescent Width                 : ${mf.dddms(tCw)}");
   print(
-    "Best Time                        : ${mf.dhhms(bTime, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")}",
+    "Best Time                        : ${mf.dhhms(bTime, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")} $wd",
   );
   print("Range q Odeh                     : ${mf.roundTo(qOdeh, place: 2)}");
-
-  print(
-    "Terbenam Bulan                   : ${mf.dhhms(mSet, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")} ",
-  );
-
-  // print(
-  //   "tglM : $tglM, blnM : $blnM, thnM : $thnM, gLon : $gLon, gLat : $gLat, elev : $elev, tmZn : $tmZn",
-  // );
 }

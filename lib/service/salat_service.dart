@@ -13,8 +13,8 @@ void main() {
   int thnM = 2025;
   double gLon = 107.6576575; // (107+37/60.0+0/3600.0)
   double gLat = -6.9754746; // -(7+5/60.0+0/3600.0)
-  double elev = 10.0;
-  double tmZn = 7.0;
+  double elev = 10;
+  double tmZn = 7;
   int ihty = 2;
 
   print(
@@ -51,8 +51,8 @@ void main() {
   int blnM2 = 9;
   int thnM2 = 2025;
 
-  double jd1 = julianDay.kmjd(tglM1, blnM1, thnM1, 0.0, 0.0);
-  double jd2 = julianDay.kmjd(tglM2, blnM2, thnM2, 0.0, 0.0);
+  double jd1 = julianDay.kmjd(tglM1, blnM1, thnM1, 0, 0);
+  double jd2 = julianDay.kmjd(tglM2, blnM2, thnM2, 0, 0);
 
   double diff = (jd2 - jd1) + 1;
   double jdh = jd1 - 1;

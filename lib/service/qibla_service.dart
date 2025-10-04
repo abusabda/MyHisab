@@ -11,7 +11,7 @@ void main() {
   final int thnM = 2025;
   final double gLon = 107.6576575;
   final double gLat = -6.9754746;
-  final double tmZn = 7.0;
+  final double tmZn = 7;
   final int sdp = 2;
 
   // Cetak

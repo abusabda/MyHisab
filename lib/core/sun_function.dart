@@ -144,16 +144,16 @@ class SunFunction {
     final b = mf.deg(
       b00sum +
           b01sum * tau +
-          b02sum * math.pow(tau, 2.0) +
-          b03sum * math.pow(tau, 3.0) +
-          b04sum * math.pow(tau, 4.0),
+          b02sum * math.pow(tau, 2) +
+          b03sum * math.pow(tau, 3) +
+          b04sum * math.pow(tau, 4),
     );
 
     return b;
   }
 
   double earthRadiusVector(double jd, double deltaT) {
-    final jde = jd + deltaT / 86400.0;
+    final jde = jd + deltaT / 86400;
     final t = julianDay.jc(jde);
     final tau = julianDay.jm(t);
 
@@ -196,10 +196,10 @@ class SunFunction {
     final r =
         r000sum +
         r001sum * tau +
-        r002sum * math.pow(tau, 2.0) +
-        r003sum * math.pow(tau, 3.0) +
-        r004sum * math.pow(tau, 4.0) +
-        r005sum * math.pow(tau, 5.0);
+        r002sum * math.pow(tau, 2) +
+        r003sum * math.pow(tau, 3) +
+        r004sum * math.pow(tau, 4) +
+        r005sum * math.pow(tau, 5);
 
     return r;
   }
@@ -207,10 +207,10 @@ class SunFunction {
   double sunGeocentricLongitude(double jd, double deltaT, String optional) {
     final l = earthHeliocentricLongitude(jd, deltaT);
     final b = earthHeliocentricLatitude(jd, deltaT);
-    final theta = mf.mod(l + 180.0, 360.0);
+    final theta = mf.mod(l + 180, 360);
     final beta = -b;
 
-    final jde = jd + deltaT / 86400.0;
+    final jde = jd + deltaT / 86400;
     final t = julianDay.jc(jde);
 
     final lmbdP = mf.mod(theta - 1.397 * t - 0.00031 * t * t, 360.0);
@@ -219,7 +219,7 @@ class SunFunction {
             0.03916 *
                 (math.cos(mf.rad(lmbdP)) + math.sin(mf.rad(lmbdP))) *
                 math.tan(mf.rad(beta))) /
-        3600.0;
+        3600;
     final thtaFK5 = theta + dltTh;
 
     final dltPsi = nt.nutationInLongitude(jd, deltaT);
@@ -239,16 +239,16 @@ class SunFunction {
   double sunGeocentricLatitude(double jd, double deltaT) {
     final l = earthHeliocentricLongitude(jd, deltaT);
     final b = earthHeliocentricLatitude(jd, deltaT);
-    final theta = mf.mod(l + 180.0, 360.0);
+    final theta = mf.mod(l + 180, 360);
     final beta = -b;
 
-    final jde = jd + deltaT / 86400.0;
+    final jde = jd + deltaT / 86400;
     final t = julianDay.jce(jde);
 
     final lambdP = theta - 1.397 * t - 0.00031 * t * t;
     final dltBta =
         (0.03916 * (math.cos(mf.rad(lambdP)) - math.sin(mf.rad(lambdP)))) /
-        3600.0;
+        3600;
 
     final btaFk5 = beta + dltBta;
     return btaFk5;
@@ -258,7 +258,7 @@ class SunFunction {
     final r = earthRadiusVector(jd, deltaT);
     final rAU = r;
     final rKM = r * 149597870.7;
-    final rER = r * 149597870.7 / 6371.0;
+    final rER = r * 149597870.7 / 6371;
 
     switch (opt) {
       case "AU":
@@ -329,7 +329,7 @@ class SunFunction {
           math.cos(mf.rad(lambda)),
         ),
       ),
-      360.0,
+      360,
     );
 
     return alphaFK5;
@@ -358,8 +358,8 @@ class SunFunction {
       280.46061837 +
           360.98564736629 * (jd - 2451545.0) +
           0.000387933 * math.pow(t, 2.0) -
-          (math.pow(t, 3.0) / 38710000),
-      360.0,
+          (math.pow(t, 3) / 38710000),
+      360,
     );
     return gmst;
   }
@@ -408,8 +408,8 @@ class SunFunction {
                   math.tan(mf.rad(dec)) * math.cos(mf.rad(gLat)),
             ),
           ) +
-          180.0,
-      360.0,
+          180,
+      360,
     );
     return azm;
   }
@@ -436,7 +436,7 @@ class SunFunction {
   double sunGeocentricSemidiameter(double jd, double deltaT) {
     double r = earthRadiusVector(jd, deltaT);
     double s0 = 15 + 59.63 / 60; // 15'59.63" dalam menit
-    double s = (s0 / r) / 60.0; // hasil dalam derajat
+    double s = (s0 / r) / 60; // hasil dalam derajat
     return s;
   }
 
@@ -453,14 +453,14 @@ class SunFunction {
 
   double termX(double gLat, double elev) {
     double u = termU(gLat);
-    double x = math.cos(u) + (elev / 6378140.0) * math.cos(mf.rad(gLat));
+    double x = math.cos(u) + (elev / 6378140) * math.cos(mf.rad(gLat));
     return x;
   }
 
   double termY(double gLat, double elev) {
     double u = termU(gLat);
     double y =
-        0.99664719 * math.sin(u) + (elev / 6378140.0) * math.sin(mf.rad(gLat));
+        0.99664719 * math.sin(u) + (elev / 6378140) * math.sin(mf.rad(gLat));
     return y;
   }
 
@@ -533,11 +533,11 @@ class SunFunction {
     return (1.02 /
                 math.tan(mf.rad(h + 10.3 / (h + 5.11))) *
                 P /
-                1010.0 *
-                283.0 /
-                (273.0 + t) +
+                1010 *
+                283 /
+                (273 + t) +
             0.0019279204034639303) /
-        60.0;
+        60;
   }
 
   double sunTopocentricLongitude(
@@ -566,7 +566,7 @@ class SunFunction {
           n,
         ),
       ),
-      360.0,
+      360,
     );
     return lmbdP;
   }
@@ -689,8 +689,8 @@ class SunFunction {
                   math.tan(mf.rad(dltP)) * math.cos(mf.rad(gLat)),
             ),
           ) +
-          180.0,
-      360.0,
+          180,
+      360,
     );
 
     return azmP;
@@ -762,7 +762,7 @@ class SunFunction {
   }
 
   double equationOfTime(double jd, double deltaT) {
-    double jde = jd + deltaT / 86400.0;
+    double jde = jd + deltaT / 86400;
     double t = julianDay.jc(jde);
     double tau = julianDay.jm(t);
 
@@ -777,7 +777,7 @@ class SunFunction {
           math.pow(tau, 3.0) / 49931 -
           math.pow(tau, 4.0) / 15300 -
           math.pow(tau, 5.0) / 2000000,
-      360.0,
+      360,
     );
 
     double e = lo - 0.0057183 - alpha + dPsi * math.cos(mf.rad(epsln));
@@ -810,13 +810,13 @@ class SunFunction {
     double cJDN = (jdNM + 0.5 + (tmZn / 24.0)).floorToDouble();
 
     for (int i = 1; i <= 2; i++) {
-      double jdGS = cJDN - 0.5 + (jSunSet - tmZn) / 24.0;
-      double jdeGS = jdGS + dt.deltaT(jdGS) / 86400.0;
+      double jdGS = cJDN - 0.5 + (jSunSet - tmZn) / 24;
+      double jdeGS = jdGS + dt.deltaT(jdGS) / 86400;
       double dltS = sunGeocentricDeclination(jdeGS, 0.0);
       double sdS = sunGeocentricSemidiameter(jdeGS, 0.0);
       double eoT = equationOfTime(jdeGS, 0.0);
-      double rfS = 34.16 / 60.0;
-      double dip = 2.1 * math.sqrt(elev) / 60.0;
+      double rfS = 34.16 / 60;
+      double dip = 2.1 * math.sqrt(elev) / 60;
       double altS = 0 - sdS - rfS - dip + 0.0024;
 
       double coshaS =
@@ -826,14 +826,14 @@ class SunFunction {
 
       if (coshaS.abs() < 1) {
         haS = mf.deg(math.acos(coshaS));
-        kwd = gLon / 15.0 - tmZn;
-        jSunSet = haS / 15.0 + 12.0 - eoT - kwd;
+        kwd = gLon / 15 - tmZn;
+        jSunSet = haS / 15 + 12 - eoT - kwd;
       } else {
         jSunSet = 0.0;
       }
     }
 
-    double jdGS = cJDN - 0.5 + (jSunSet - tmZn) / 24.0;
+    double jdGS = cJDN - 0.5 + (jSunSet - tmZn) / 24;
     return jdGS;
   }
 }

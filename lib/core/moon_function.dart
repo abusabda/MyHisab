@@ -60,14 +60,14 @@ class MoonFunction {
   double moonGeocentricGreenwichHourAngle(double jd, double deltaT) {
     final gast = sn.greenwichApparentSiderialTime(jd, deltaT);
     final alpha = moonGeocentricRightAscension(jd, deltaT);
-    final gha = mf.mod(gast - alpha, 360.0);
+    final gha = mf.mod(gast - alpha, 360);
     return gha;
   }
 
   double moonGeocentricLocalHourAngel(double jd, double deltaT, double gLon) {
     final gast = sn.greenwichApparentSiderialTime(jd, deltaT);
     final alpha = moonGeocentricRightAscension(jd, deltaT);
-    final lhaFK5 = mf.mod(gast + gLon - alpha, 360.0);
+    final lhaFK5 = mf.mod(gast + gLon - alpha, 360);
     return lhaFK5;
   }
 
@@ -87,8 +87,8 @@ class MoonFunction {
                   math.tan(mf.rad(dec)) * math.cos(mf.rad(gLat)),
             ),
           ) +
-          180.0,
-      360.0,
+          180,
+      360,
     );
     return azm;
   }
@@ -166,7 +166,7 @@ class MoonFunction {
         rMoon - rSun * math.cos(mf.rad(d)),
       ),
     );
-    final k = ((1 + math.cos(mf.rad(i))) / 2) * 100.0;
+    final k = ((1 + math.cos(mf.rad(i))) / 2) * 100;
     return k;
   }
 
@@ -186,7 +186,7 @@ class MoonFunction {
                   math.cos(mf.rad(alphaSun - alphaMoon)),
         ),
       ),
-      360.0,
+      360,
     );
     return x;
   }
@@ -241,14 +241,14 @@ class MoonFunction {
     final P = pres;
     final T = temp;
 
-    return (1.0 /
+    return (1 /
                 math.tan(mf.rad(h + 7.31 / (h + 4.4))) *
                 P /
-                1010.0 *
-                283.0 /
-                (273.0 + T) +
+                1010 *
+                283 /
+                (273 + T) +
             0.0013515216737560731) /
-        60.0;
+        60;
   }
 
   double parallaxInTheMoonAltitude(
@@ -297,7 +297,7 @@ class MoonFunction {
           n,
         ),
       ),
-      360.0,
+      360,
     );
 
     return lmbdP;
@@ -438,8 +438,8 @@ class MoonFunction {
                   math.tan(mf.rad(dltP)) * math.cos(mf.rad(gLat)),
             ),
           ) +
-          180.0,
-      360.0,
+          180,
+      360,
     );
 
     return azmP;
@@ -622,7 +622,7 @@ class MoonFunction {
     double i = mf.deg(
       math.atan2(rSn * math.sin(mf.rad(d)), rMn - rSn * math.cos(mf.rad(d))),
     );
-    double k = ((1 + math.cos(mf.rad(i))) / 2) * 100.0;
+    double k = ((1 + math.cos(mf.rad(i))) / 2) * 100;
     return k;
   }
 
@@ -654,7 +654,7 @@ class MoonFunction {
                   math.cos(mf.rad(alphSn - alphMn)),
         ),
       ),
-      360.0,
+      360,
     );
     return x;
   }
@@ -698,7 +698,7 @@ class MoonFunction {
         29.1053567 * k -
         0.0000014 * math.pow(t, 2) -
         0.00000011 * math.pow(t, 3);
-    m = mf.rad(mf.mod(m, 360.0));
+    m = mf.rad(mf.mod(m, 360));
 
     var mp =
         201.5643 +
@@ -706,7 +706,7 @@ class MoonFunction {
         0.0107582 * math.pow(t, 2) +
         0.00001238 * math.pow(t, 3) -
         0.000000058 * math.pow(t, 4);
-    mp = mf.rad(mf.mod(mp, 360.0));
+    mp = mf.rad(mf.mod(mp, 360));
 
     var f =
         160.7108 +
@@ -714,29 +714,29 @@ class MoonFunction {
         0.0016118 * math.pow(t, 2) -
         0.00000227 * math.pow(t, 3) +
         0.000000011 * math.pow(t, 4);
-    f = mf.rad(mf.mod(f, 360.0));
+    f = mf.rad(mf.mod(f, 360));
 
     var om =
         124.7746 -
         1.56375588 * k +
         0.0020672 * math.pow(t, 2) +
         0.00000215 * math.pow(t, 3);
-    om = mf.rad(mf.mod(om, 360.0));
+    om = mf.rad(mf.mod(om, 360));
 
-    final a1 = mf.rad(mf.mod(299.77 + 0.107408 * k - 0.009173 * t * t, 360.0));
-    final a2 = mf.rad(mf.mod(251.88 + 0.016321 * k, 360.0));
-    final a3 = mf.rad(mf.mod(251.83 + 26.651886 * k, 360.0));
-    final a4 = mf.rad(mf.mod(349.42 + 36.412478 * k, 360.0));
-    final a5 = mf.rad(mf.mod(84.66 + 18.206239 * k, 360.0));
-    final a6 = mf.rad(mf.mod(141.74 + 53.303771 * k, 360.0));
-    final a7 = mf.rad(mf.mod(207.14 + 2.453732 * k, 360.0));
-    final a8 = mf.rad(mf.mod(154.84 + 7.30686 * k, 360.0));
-    final a9 = mf.rad(mf.mod(34.52 + 27.261239 * k, 360.0));
-    final a10 = mf.rad(mf.mod(207.19 + 0.121824 * k, 360.0));
-    final a11 = mf.rad(mf.mod(291.34 + 1.844379 * k, 360.0));
-    final a12 = mf.rad(mf.mod(161.72 + 24.198154 * k, 360.0));
-    final a13 = mf.rad(mf.mod(239.56 + 25.513099 * k, 360.0));
-    final a14 = mf.rad(mf.mod(331.55 + 3.592518 * k, 360.0));
+    final a1 = mf.rad(mf.mod(299.77 + 0.107408 * k - 0.009173 * t * t, 360));
+    final a2 = mf.rad(mf.mod(251.88 + 0.016321 * k, 360));
+    final a3 = mf.rad(mf.mod(251.83 + 26.651886 * k, 360));
+    final a4 = mf.rad(mf.mod(349.42 + 36.412478 * k, 360));
+    final a5 = mf.rad(mf.mod(84.66 + 18.206239 * k, 360));
+    final a6 = mf.rad(mf.mod(141.74 + 53.303771 * k, 360));
+    final a7 = mf.rad(mf.mod(207.14 + 2.453732 * k, 360));
+    final a8 = mf.rad(mf.mod(154.84 + 7.30686 * k, 360));
+    final a9 = mf.rad(mf.mod(34.52 + 27.261239 * k, 360));
+    final a10 = mf.rad(mf.mod(207.19 + 0.121824 * k, 360));
+    final a11 = mf.rad(mf.mod(291.34 + 1.844379 * k, 360));
+    final a12 = mf.rad(mf.mod(161.72 + 24.198154 * k, 360));
+    final a13 = mf.rad(mf.mod(239.56 + 25.513099 * k, 360));
+    final a14 = mf.rad(mf.mod(331.55 + 3.592518 * k, 360));
 
     double jdeCorr1;
     switch (moonPhaseKind) {
@@ -904,7 +904,7 @@ class MoonFunction {
 
     double m =
         2.5534 + 29.1053567 * k - 0.0000014 * t * t - 0.00000011 * t * t * t;
-    m = mf.rad(mf.mod(m, 360.0));
+    m = mf.rad(mf.mod(m, 360));
 
     double mp =
         201.5643 +
@@ -912,7 +912,7 @@ class MoonFunction {
         0.0107582 * t * t +
         0.00001238 * t * t * t -
         0.000000058 * t * t * t * t;
-    mp = mf.rad(mf.mod(mp, 360.0));
+    mp = mf.rad(mf.mod(mp, 360));
 
     double f =
         160.7108 +
@@ -920,20 +920,20 @@ class MoonFunction {
         0.0016118 * t * t -
         0.00000227 * t * t * t +
         0.000000011 * t * t * t * t;
-    f = mf.rad(mf.mod(f, 360.0));
+    f = mf.rad(mf.mod(f, 360));
 
     double omg =
         124.7746 - 1.56375588 * k + 0.0020672 * t * t + 0.00000215 * t * t * t;
-    omg = mf.rad(mf.mod(omg, 360.0));
+    omg = mf.rad(mf.mod(omg, 360));
 
     if ((math.sin(f)).abs() > 0.36) {
       return 0.0;
     } else {
       double f1 = mf.deg(f) - 0.02665 * math.sin(omg);
-      f1 = mf.rad(mf.mod(f1, 360.0));
+      f1 = mf.rad(mf.mod(f1, 360));
 
       double a1 = 299.77 + 0.107408 * k - 0.009173 * t * t;
-      a1 = mf.rad(mf.mod(a1, 360.0));
+      a1 = mf.rad(mf.mod(a1, 360));
 
       double jdeCorr;
       switch (eclipseKind) {
@@ -978,9 +978,9 @@ class MoonFunction {
     double jdNMGeo = 0.0;
     double jdNM = moonPhasesModified(hijriMonth, hijriYear, 1);
 
-    double x1 = jdNM - 1 / 24.0;
+    double x1 = jdNM - 1 / 24;
     double x2 = jdNM;
-    double x3 = jdNM + 1 / 24.0;
+    double x3 = jdNM + 1 / 24;
 
     double y1 =
         sn.sunGeocentricLongitude(x1, deltaT, "appa") -
@@ -1000,7 +1000,7 @@ class MoonFunction {
 
     for (int i = 1; i <= 2; i++) {
       n0 = -2 * y2 / (a + b + c * n0);
-      jdNMGeo = jdNM + n0 / 24.0;
+      jdNMGeo = jdNM + n0 / 24;
     }
 
     double lonG = sn.sunGeocentricLongitude(jdNMGeo, deltaT, "appa");
@@ -1027,9 +1027,9 @@ class MoonFunction {
     var jdNMTopo = 0.0;
     double jdNM = moonPhasesModified(hijriMonth, hijriYear, 1);
 
-    double x1 = jdNM - 1 / 24.0;
+    double x1 = jdNM - 1 / 24;
     double x2 = jdNM;
-    double x3 = jdNM + 1 / 24.0;
+    double x3 = jdNM + 1 / 24;
 
     double y1 =
         sn.sunTopocentricLongitude(x1, deltaT, gLon, gLat, elev) -
@@ -1050,7 +1050,7 @@ class MoonFunction {
 
     for (int i = 1; i <= 2; i++) {
       n0 = -2 * y2 / (a + b + c * n0);
-      jdNMTopo = jdNM + n0 / 24.0;
+      jdNMTopo = jdNM + n0 / 24;
     }
 
     double lonT = sn.sunTopocentricLongitude(
@@ -1094,7 +1094,7 @@ class MoonFunction {
     double pi;
     double h0 = 0.0;
     double cosHA0;
-    double ha0; // bisa double atau "circumpolar"
+    double ha0;
     double t;
     double theta0 = 0.0;
     double m = 0.0;
@@ -1112,23 +1112,23 @@ class MoonFunction {
 
     for (int dItr = 1; dItr <= 3; dItr++) {
       jde00UT = jd00UT + dt.deltaT(jd00UT) / 86400.0;
-      alphaM00d = moonGeocentricRightAscension(jde00UT, 0.0);
       alphaMm1d = moonGeocentricRightAscension(jde00UT - 1, 0);
+      alphaM00d = moonGeocentricRightAscension(jde00UT - 0, 0);
       alphaMp1d = moonGeocentricRightAscension(jde00UT + 1, 0);
 
       if (trsType == "TRANSIT") {
-        deltaM00d = 0.0;
-        deltaMm1d = 0.0;
-        deltaMp1d = 0.0;
+        deltaM00d = 0;
+        deltaMm1d = 0;
+        deltaMp1d = 0;
       } else {
-        deltaM00d = moonGeocentricDeclination(jde00UT, 0.0);
         deltaMm1d = moonGeocentricDeclination(jde00UT - 1, 0);
+        deltaM00d = moonGeocentricDeclination(jde00UT - 0, 0);
         deltaMp1d = moonGeocentricDeclination(jde00UT + 1, 0);
       }
 
-      pi = moonEquatorialHorizontalParallax(jde00UT, 0.0);
+      pi = moonEquatorialHorizontalParallax(jde00UT, 0);
 
-      h0 = -(34 / 60.0) + 0.7275 * pi - 0.0353 * math.sqrt(elev);
+      h0 = -(34 / 60) + 0.7275 * pi - 0.0353 * math.sqrt(elev);
       cosHA0 =
           (math.sin(mf.rad(h0)) -
               math.sin(mf.rad(gLat)) * math.sin(mf.rad(deltaM00d))) /
@@ -1137,55 +1137,55 @@ class MoonFunction {
       if ((cosHA0).abs() <= 1) {
         ha0 = mf.deg(math.acos(cosHA0));
       } else {
-        ha0 = 0.0;
+        ha0 = 0;
       }
 
-      t = (jde00UT - 2451545) / 36525.0;
+      t = (jde00UT - 2451545) / 36525;
 
       theta0 =
           (100.46061837) +
           (36000.770053608 * t) +
           (0.000387933 * t * t) -
           (math.pow(t, 3.0) / 38710000) +
-          (nt.nutationInLongitude(jde00UT, 0.0) *
-              math.cos(mf.rad(nt.trueObliquityOfEcliptic(jde00UT, 0.0))));
+          (nt.nutationInLongitude(jde00UT, 0) *
+              math.cos(mf.rad(nt.trueObliquityOfEcliptic(jde00UT, 0))));
 
-      theta0 = mf.mod(theta0, 360.0);
+      theta0 = mf.mod(theta0, 360);
 
-      m = (alphaM00d - gLon - theta0) / 360.0;
+      m = (alphaM00d - gLon - theta0) / 360;
 
       switch (trsType) {
         case "TRANSIT":
           m = m;
           break;
         case "RISE":
-          m = m - ha0 / 360.0;
+          m = m - ha0 / 360;
           break;
         case "SET":
-          m = m + ha0 / 360.0;
+          m = m + ha0 / 360;
           break;
       }
 
-      m = mf.mod(m, 1.0);
+      m = mf.mod(m, 1);
 
       for (int itr = 1; itr <= maxItr; itr++) {
         sTheta0 = theta0 + 360.985647 * m;
-        sTheta0 = mf.mod(sTheta0, 360.0);
+        sTheta0 = mf.mod(sTheta0, 360);
         nT = m;
         alphaM = mf.mod(
           alphaM00d +
               nT /
                   2.0 *
-                  (mf.mod((alphaM00d - alphaMm1d), 360.0) +
-                      mf.mod((alphaMp1d - alphaM00d), 360.0) +
+                  (mf.mod((alphaM00d - alphaMm1d), 360) +
+                      mf.mod((alphaMp1d - alphaM00d), 360) +
                       nT *
-                          (mf.mod((alphaMp1d - alphaM00d), 360.0) -
-                              mf.mod((alphaM00d - alphaMm1d), 360.0))),
-          360.0,
+                          (mf.mod((alphaMp1d - alphaM00d), 360) -
+                              mf.mod((alphaM00d - alphaMm1d), 360))),
+          360,
         );
 
         if (trsType == "TRANSIT") {
-          deltaM = 0.0;
+          deltaM = 0;
         } else {
           deltaM =
               deltaM00d +
@@ -1198,10 +1198,10 @@ class MoonFunction {
 
         ha = sTheta0 + gLon - alphaM;
 
-        if (mf.mod(ha, 360.0) > 180.0) {
-          ha = mf.mod(ha, 360.0) - 360.0;
+        if (mf.mod(ha, 360) > 180) {
+          ha = mf.mod(ha, 360) - 360;
         } else {
-          ha = mf.mod(ha, 360.0);
+          ha = mf.mod(ha, 360);
         }
 
         h = mf.deg(
@@ -1215,31 +1215,31 @@ class MoonFunction {
 
         switch (trsType) {
           case "TRANSIT":
-            dltm = -ha / 360.0;
+            dltm = -ha / 360;
             break;
           case "RISE":
           case "SET":
             dltm =
                 (h - h0) /
-                (360.0 *
+                (360 *
                     math.cos(mf.rad(deltaM)) *
                     math.cos(mf.rad(gLat)) *
                     math.sin(mf.rad(ha)));
             break;
         }
 
-        m = mf.mod(m + dltm, 1.0);
+        m = mf.mod(m + dltm, 1);
       }
 
       jdTRS = jd00UT + m;
-      jd00LT = jd.kmjd(tglM, blnM, thnM, 0.0, tmZn);
+      jd00LT = jd.kmjd(tglM, blnM, thnM, 0, tmZn);
       ttrs = double.parse(jd.jdkm(jdTRS, tmZn, "JAMDES"));
 
       if ((jdTRS >= (jd00LT + 0)) && (jdTRS <= (jd00LT + 1))) {
         ttrs = double.parse(jd.jdkm(jdTRS, tmZn, "JAMDES"));
       } else {
         jd00UT = jd00UT + 1;
-        ttrs = 0.0;
+        ttrs = 0;
       }
     }
     return ttrs;
