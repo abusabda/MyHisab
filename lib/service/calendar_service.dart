@@ -8,7 +8,20 @@ import 'package:myhisab/core/moon_latitude.dart';
 import 'package:myhisab/core/moon_longitude.dart';
 import 'package:myhisab/core/sun_function.dart';
 
-void main() {
+String hisabAwalBulanHijriahSesuaiLokasi({
+  required String nmLokasi,
+  required int blnH,
+  required int thnH,
+  required double gLon,
+  required double gLat,
+  required double tmZn,
+  required double elev,
+  required double pres,
+  required double temp,
+  required int sdp,
+  int tbhHari = 0,
+  int optKriteria = 1, // 1 = Imkan Rukyat, 2 = Wujudul Hilal
+}) {
   final julianDay = JulianDay();
   final dynamicalTime = DynamicalTime();
 
@@ -18,22 +31,6 @@ void main() {
   final mb = MoonLatitude();
   final md = MoonDistance();
   final mo = MoonFunction();
-
-  // ===================
-  // INPUT
-  // ===================
-  final String nmL = "Pelabuhanratu";
-  final int blnH = 10;
-  final int thnH = 1444;
-  final double gLon = (106 + 33 / 60 + 27.8 / 3600);
-  final double gLat = -(7 + 1 / 60 + 44.6 / 3600);
-  final double tmZn = 7;
-  final double elev = 52.685;
-  final double pres = 1010;
-  final double temp = 10;
-  final int sdp = 2;
-  final int tbhHari = 0;
-  final int optional = 1; // 1 = Imkan Rukyat, 2 = Wujudul Hilal
 
   String getZonaWaktu(double tmZn) {
     switch (tmZn) {
@@ -233,7 +230,7 @@ void main() {
   }
 
   // Tampilkan pilihan Kriteria dan hasil akhir kriteria
-  if (optional == 1) {
+  if (optKriteria == 1) {
     // pilihan imkan rukyat
     abq = ((jdNM2 + 0.5 + tmZn / 24).floor() - tmZn / 24.0) + iR01;
     kr = visb;
@@ -262,260 +259,266 @@ void main() {
   ];
   final nmBlnH = nmBlnHDt[blnH - 1];
 
-  // ===================
-  // OUTPUT
-  // ===================
-  print("Perhitungan Awal Bulan           : $nmBlnH $thnH H");
-  print("Lokasi                           : $nmL");
-  print(
+  final sb = StringBuffer();
+
+  sb.writeln("Perhitungan Awal Bulan           : $nmBlnH $thnH H");
+  sb.writeln("Lokasi                           : $nmLokasi");
+  sb.writeln(
     "Koordinat                        : ${mf.dddms(gLon, optResult: "BBBT", sdp: sdp, posNegSign: "+-")} | ${mf.dddms2(gLat, optResult: "LULS", sdp: sdp, posNegSign: "")}",
   );
-  print("Elevasi                          : ${elev.toStringAsFixed(3)} Mdpl");
-  print("Time Zone                        : $tmZn jam");
-  print("Saat perhitungan                 : ${julianDay.jdkm(jd)} | JD: $jd");
-  print("Delta T                          : ${dltT.toStringAsFixed(2)}s");
-  print(
-    "Algoritma                        : VSOP87D & ELP/MPP02, dengan 38.326 suku koreksi",
+  sb.writeln(
+    "Elevasi                          : ${elev.toStringAsFixed(3)} Mdpl",
+  );
+  sb.writeln("Time Zone                        : $tmZn jam");
+  sb.writeln(
+    "Saat perhitungan                 : ${julianDay.jdkm(jd)} | JD: $jd",
+  );
+  sb.writeln("Delta T                          : ${dltT.toStringAsFixed(2)}s");
+  sb.writeln(
+    "Algoritma                        : VSOP87D & ELP/MPP02 (38.326 suku koreksi)",
   );
 
-  print(
-    "Ijtimak Geosentris               : ${julianDay.jdkm(jdNM2)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM2, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM4)}",
+  sb.writeln(
+    "Ijtimak Geosentris               : ${julianDay.jdkm(jdNM2, tmZn)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM2, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM4)}",
   );
 
-  print(
-    "Ijtimak Toposentris              : ${julianDay.jdkm(jdNM3)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM3, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM5)}",
+  sb.writeln(
+    "Ijtimak Toposentris              : ${julianDay.jdkm(jdNM3, tmZn)} | jam: ${mf.dhhms(double.parse(julianDay.jdkm(jdNM3, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd | Bujur: ${mf.dddms(jdNM5)}",
   );
 
-  print(
+  sb.writeln(
     "Gurub Matahari                   : ${jamGS != 0.0 ? "${mf.dhhms(jamGS, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")} $wd" : "sirkompular"}",
   );
 
-  print(
+  sb.writeln(
     "Gurub Bulan                      : ${mSet != 0.0 ? "${mf.dhhms(mSet, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")} $wd" : "sirkompular"}",
   );
 
-  print("Kriteria                         : $kr1");
-  print("Status                           : $kr");
-  print("Awal Bulan                       : ${julianDay.jdkm(abq, tmZn)}");
+  sb.writeln("Kriteria                         : $kr1");
+  sb.writeln("Status                           : $kr");
+  sb.writeln("Awal Bulan                       : ${julianDay.jdkm(abq, tmZn)}");
 
-  print("=============================================================");
-  print(
+  sb.writeln("=============================================================");
+  sb.writeln(
     "Data Matahari ${julianDay.jdkm(jdNM2)} jam: ${mf.dhhms(double.parse(julianDay.jdkm(jd, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd",
   );
-  print("=============================================================");
+  sb.writeln("=============================================================");
 
-  print(
+  sb.writeln(
     "G.Longitude (True)               : ${mf.dddms(sn.sunGeocentricLongitude(jd, dltT, "True"))}",
   );
-  print(
+  sb.writeln(
     "G.Longitude (Appa)               : ${mf.dddms(sn.sunGeocentricLongitude(jd, dltT, "Appa"))}",
   );
-  print(
+  sb.writeln(
     "G.Latitude                       : ${mf.dddms(sn.sunGeocentricLatitude(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Right Ascension                : ${mf.dddms(sn.sunGeocentricRightAscension(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Declination                    : ${mf.dddms(sn.sunGeocentricDeclination(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Azimuth                        : ${mf.dddms(sn.sunGeocentricAzimuth(jd, dltT, gLon, gLat))}",
   );
-  print(
+  sb.writeln(
     "G.Altitude                       : ${mf.dddms(sn.sunGeocentricAltitude(jd, dltT, gLon, gLat))}",
   );
-  print(
+  sb.writeln(
     "G.Semidiamater                   : ${mf.dddms(sn.sunGeocentricSemidiameter(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.eq Horizontal Parallax         : ${mf.dddms(sn.sunEquatorialHorizontalParallax(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Distance (AU)                  : ${sn.sunGeocentricDistance(jd, dltT, "AU").toStringAsFixed(6)} AU",
   );
-  print(
+  sb.writeln(
     "G.Distance (KM)                  : ${sn.sunGeocentricDistance(jd, dltT, "KM").toStringAsFixed(6)} KM",
   );
-  print(
+  sb.writeln(
     "G.Distance (ER)                  : ${sn.sunGeocentricDistance(jd, dltT, "ER").toStringAsFixed(6)} ER",
   );
-  print(
+  sb.writeln(
     "G.Greenwich Hour Angle           : ${mf.dhhms(sn.sunGeocentricGreenwichHourAngle(jd, dltT) / 15, optResult: "HHMMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
-  print(
+  sb.writeln(
     "G.Local Hour Angle               : ${mf.dhhms(sn.sunGeocentricLocalHourAngle(jd, dltT, gLon) / 15, optResult: "HHMMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
-  print(
+  sb.writeln(
     "T.Longitude                      : ${mf.dddms(sn.sunTopocentricLongitude(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Latitude                       : ${mf.dddms(sn.sunTopocentricLatitude(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Right Ascension                : ${mf.dddms(sn.sunTopocentricRightAscension(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Declination                    : ${mf.dddms(sn.sunTopocentricDeclination(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Azimuth                        : ${mf.dddms(sn.sunTopocentricAzimuth(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Altitude (Airless)             : ${mf.dddms(sn.sunTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "ht"))}",
   );
-  print(
+  sb.writeln(
     "T.Altitude (Apparent)            : ${mf.dddms(sn.sunTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "hta"))}",
   );
-  print(
+  sb.writeln(
     "M.Altitude                       : ${mf.dddms(sn.sunTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "hto"))}",
   );
-  print(
+  sb.writeln(
     "T.Semidiameter                   : ${mf.dddms(sn.sunTopocentricSemidiameter(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Greenwich Hour Angle           : ${mf.dhhms(sn.sunTopocentricGreenwichHourAngle(jd, dltT, gLon, gLat, elev) / 15, optResult: "HHMMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
-  print(
+  sb.writeln(
     "T.Local Hour Angle               : ${mf.dhhms(sn.sunTopocentricLocalHourAngel(jd, dltT, gLon, gLat, elev) / 15, optResult: "HHMMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
-  print(
+  sb.writeln(
     "Equation of Time                 : ${mf.dhhms(sn.equationOfTime(jd, dltT), optResult: "MMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
 
-  print("=============================================================");
-  print(
+  sb.writeln("=============================================================");
+  sb.writeln(
     "Data Bulan ${julianDay.jdkm(jdNM2)} jam: ${mf.dhhms(double.parse(julianDay.jdkm(jd, tmZn, "JamDes")), optResult: "HH:MM:SS", secDecPlaces: sdp, posNegSign: "")} $wd",
   );
-  print("=============================================================");
-  print("Julian Day                       : $jd");
-  print("Delta T                          : ${dltT.toStringAsFixed(2)} s");
-  print(
+  sb.writeln("=============================================================");
+  sb.writeln("Julian Day                       : $jd");
+  sb.writeln("Delta T                          : ${dltT.toStringAsFixed(2)} s");
+  sb.writeln(
     "G.Longitude (True)               : ${mf.dddms(ml.moonGeocentricLongitude(jd, dltT, "True"))}",
   );
-  print(
+  sb.writeln(
     "G.Longitude (Appa)               : ${mf.dddms(ml.moonGeocentricLongitude(jd, dltT, "Appa"))}",
   );
-  print(
+  sb.writeln(
     "G.Latitude                       : ${mf.dddms(mb.moonGeocentricLatitude(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Right Ascension                : ${mf.dddms(mo.moonGeocentricRightAscension(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Declination                    : ${mf.dddms(mo.moonGeocentricDeclination(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Azimuth                        : ${mf.dddms(mo.moonGeocentricAzimuth(jd, dltT, gLon, gLat))}",
   );
-  print(
+  sb.writeln(
     "G.Altitude                       : ${mf.dddms(mo.moonGeocentricAltitude(jd, dltT, gLon, gLat))}",
   );
-  print(
+  sb.writeln(
     "G.Eq Horizontal Parallax         : ${mf.dddms(mo.moonEquatorialHorizontalParallax(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Semidiamater                   : ${mf.dddms(mo.moonGeocentricSemidiameter(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Elongation                     : ${mf.dddms(mo.moonSunGeocentricElongation(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Phase Angle                    : ${mf.dddms(mo.moonGeocentricPhaseAngle(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Disk Illuminated fraction      : ${mo.moonGeocentricDiskIlluminatedFraction(jd, dltT).toStringAsFixed(17)}",
   );
-  print(
+  sb.writeln(
     "G.Bright Limb Angle              : ${mf.dddms(mo.moonGeocentricBrightLimbAngle(jd, dltT))}",
   );
-  print(
+  sb.writeln(
     "G.Greenwich Hour Angle           : ${mf.dhhms(mo.moonGeocentricGreenwichHourAngle(jd, dltT) / 15, optResult: "HHMMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
-  print(
+  sb.writeln(
     "G.Local Hour Angle               : ${mf.dhhms(mo.moonGeocentricLocalHourAngel(jd, dltT, gLon) / 15, optResult: "HHMMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
-  print(
+  sb.writeln(
     "G.Distance (KM)                  : ${md.moonGeocentricDistance(jd, dltT, "KM").toStringAsFixed(5)} KM",
   );
-  print(
+  sb.writeln(
     "G.Distance (AU)                  : ${md.moonGeocentricDistance(jd, dltT, "AU").toStringAsFixed(5)} AU",
   );
-  print(
+  sb.writeln(
     "G.Distance (ER)                  : ${md.moonGeocentricDistance(jd, dltT, "ER").toStringAsFixed(5)} ER",
   );
-  print("G.Relative Altitude              : ${mf.dddms(relAltGeo)}");
-  print("G.Crescent Width                 : ${mf.dddms(gCw)}");
-  print(
+  sb.writeln("G.Relative Altitude              : ${mf.dddms(relAltGeo)}");
+  sb.writeln("G.Crescent Width                 : ${mf.dddms(gCw)}");
+  sb.writeln(
     "T.Longitude                      : ${mf.dddms(mo.moonTopocentricLongitude(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Latitude                       : ${mf.dddms(mo.moonTopocentricLatitude(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Right Ascension                : ${mf.dddms(mo.moonTopocentricRightAscension(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Declination                    : ${mf.dddms(mo.moonTopocentricDeclination(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Semidiamater                   : ${mf.dddms(mo.moonTopocentricSemidiameter(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Elongation                     : ${mf.dddms(mo.moonSunTopocentricElongation(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Phase Angle                    : ${mf.dddms(mo.moonTopocentricPhaseAngle(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Disk Illuminated fraction      : ${mo.moonTopocentricDiskIlluminatedFraction(jd, dltT, gLon, gLat, elev).toStringAsFixed(17)}",
   );
-  print(
+  sb.writeln(
     "T.Bright Limb Angle              : ${mf.dddms(mo.moonTopocentricBrightLimbAngle(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Greenwich Hour Angle           : ${mf.dhhms(mo.moonTopocentricGreenwichHourAngle(jd, dltT, gLon, gLat, elev) / 15, optResult: "HHMMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
-  print(
+  sb.writeln(
     "T.Local Hour Angle               : ${mf.dhhms(mo.moonTopocentricLocalHourAngel(jd, dltT, gLon, gLat, elev) / 15, optResult: "HHMMSS", secDecPlaces: sdp, posNegSign: "+/-")}",
   );
-  print(
+  sb.writeln(
     "T.Azimuth                        : ${mf.dddms(mo.moonTopocentricAzimuth(jd, dltT, gLon, gLat, elev))}",
   );
-  print(
+  sb.writeln(
     "T.Altitude (Airless) Center      : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htc"))}",
   );
-  print(
+  sb.writeln(
     "T.Altitude (Apparent) Center     : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htac"))}",
   );
-  print(
+  sb.writeln(
     "M.Altitude Center                : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htoc"))}",
   );
-  print(
+  sb.writeln(
     "T.Altitude (Airless) Upper       : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htu"))}",
   );
-  print(
+  sb.writeln(
     "T.Altitude (Apparent) Upper      : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htau"))}",
   );
-  print(
+  sb.writeln(
     "M.Altitude Upper                 : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htou"))}",
   );
-  print(
+  sb.writeln(
     "T.Altitude (Airless) Lower       : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htl"))}",
   );
-  print(
+  sb.writeln(
     "T.Altitude (Apparent) Lower      : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htal"))}",
   );
-  print(
+  sb.writeln(
     "M.Altitude Lower Limb            : ${mf.dddms(mo.moonTopocentricAltitude(jd, dltT, gLon, gLat, elev, pres, temp, "htol"))}",
   );
-  print("T.Relative Altitude              : ${mf.dddms(relAltTop)}");
-  print(
+  sb.writeln("T.Relative Altitude              : ${mf.dddms(relAltTop)}");
+  sb.writeln(
     "T.Arah Terbenam Bulan            : ${mf.dddms(mo.moonTopocentricAzimuth(jdMSet, dltT, gLon, gLat, elev) + 180)}",
   );
-  print("T.Crescent Width                 : ${mf.dddms(tCw)}");
-  print(
+  sb.writeln("T.Crescent Width                 : ${mf.dddms(tCw)}");
+  sb.writeln(
     "Best Time                        : ${mf.dhhms(bTime, optResult: "HH:MM:SS", secDecPlaces: 2, posNegSign: "")} $wd",
   );
-  print("Range q Odeh                     : ${mf.roundTo(qOdeh, place: 2)}");
+  sb.writeln(
+    "Range q Odeh                     : ${mf.roundTo(qOdeh, place: 2)}",
+  );
+  return sb.toString();
 }

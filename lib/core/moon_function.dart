@@ -1048,7 +1048,7 @@ class MoonFunction {
     var n0 = 0.0;
     n0 = -2 * y2 / (a + b + c * n0);
 
-    for (int i = 1; i <= 2; i++) {
+    for (int i = 1; i <= 3; i++) {
       n0 = -2 * y2 / (a + b + c * n0);
       jdNMTopo = jdNM + n0 / 24;
     }
