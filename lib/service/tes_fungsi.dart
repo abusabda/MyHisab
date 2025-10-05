@@ -1,7 +1,11 @@
+import 'package:myhisab/core/julian_day.dart';
 import 'package:myhisab/service/calendar_service.dart';
 
 void main() {
-  final hasil = hisabAwalBulanHijriahSesuaiLokasi(
+  final ab = CalendarService();
+  final jd = JulianDay();
+
+  final abqSesuaiLokasi = ab.hisabAwalBulanHijriahSesuaiLokasi(
     nmLokasi: "Pelabuhan Ratu",
     blnH: 10,
     thnH: 1444,
@@ -16,5 +20,11 @@ void main() {
     optKriteria: 1,
   );
 
-  print(hasil); // tampilkan semua output sekaligus
+  print(abqSesuaiLokasi); // tampilkan semua output sekaligus
+
+  final jdAbqMabims = ab.abqMabims(10, 1447);
+  print("Awal Bulan Hijriah Mabims: ${jd.jdkm(jdAbqMabims)}");
+
+  final abqMabimsNow = ab.serviceKalenderHijriahMABIMS(21, 3, 2026);
+  print(abqMabimsNow);
 }

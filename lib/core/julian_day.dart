@@ -162,10 +162,10 @@ class JulianDay {
   }
 
   // Konversi CJDN ke Kalender Hijriah
-  dynamic cjdNkh(
+  dynamic cjdnKH(
     int cjdn, {
-    int hCalE = 2,
-    int hCalL = 2,
+    int hCalE = 2, //pilihan epoch
+    int hCalL = 2, //pilihan leap year correction
     String optResult = " ",
   }) {
     double dltD = (hCalE == 1) ? 1948439.0 : 1948440.0;
