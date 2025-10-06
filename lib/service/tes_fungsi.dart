@@ -1,9 +1,40 @@
 import 'package:myhisab/core/julian_day.dart';
 import 'package:myhisab/service/calendar_service.dart';
+import 'package:myhisab/service/salat_service.dart';
 
 void main() {
-  final ab = CalendarService();
+  final ss = SalatService();
+  final cs = CalendarService();
   final jd = JulianDay();
+
+  final waktuSalatHarian = ss.waktuSalatHarian(
+    tglM: 1,
+    blnM: 1,
+    thnM: 2025,
+    gLon: (107 + 36 / 60),
+    gLat: -(7 + 5 / 60),
+    elev: 0,
+    tmZn: 7,
+    ihty: 2,
+  );
+
+  print(waktuSalatHarian);
+
+  final hasil = ss.waktuSalatBulanan(
+    tglM1: 1,
+    blnM1: 1,
+    thnM1: 2025,
+    tglM2: 31,
+    blnM2: 1,
+    thnM2: 2025,
+    gLon: 107 + 37 / 60.0,
+    gLat: -(7 + 5 / 60.0),
+    elev: 0,
+    tmZn: 7,
+    ihty: 2,
+  );
+
+  print(hasil);
 
   final abqSesuaiLokasi = ab.hisabAwalBulanHijriahSesuaiLokasi(
     nmLokasi: "Pelabuhan Ratu",
@@ -22,9 +53,9 @@ void main() {
 
   print(abqSesuaiLokasi); // tampilkan semua output sekaligus
 
-  final jdAbqMabims = ab.abqMabims(10, 1447);
+  final jdAbqMabims = cs.abqMabims(5, 1452);
   print("Awal Bulan Hijriah Mabims: ${jd.jdkm(jdAbqMabims)}");
 
-  final abqMabimsNow = ab.serviceKalenderHijriahMABIMS(21, 3, 2026);
+  final abqMabimsNow = cs.serviceKalenderHijriahMABIMS(30, 8, 2030);
   print(abqMabimsNow);
 }

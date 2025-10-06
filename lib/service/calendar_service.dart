@@ -549,22 +549,6 @@ class CalendarService {
 
   double abqMabims(int blnH, int thnH) {
     final lokasi = [
-      // Lokasi(
-      //   5 + 28.0 / 60 + 0.0 / 3600,
-      //   95 + 14.0 / 60 + 32.0 / 3600,
-      //   7.0,
-      // ), // Lhoknga
-      // Lokasi(
-      //   5 + 53.0 / 60 + 38.0 / 3600,
-      //   95 + 19.0 / 60 + 26.0 / 3600,
-      //   7.0,
-      // ), // Sabang
-      // Lokasi(
-      //   -(4 + 27.0 / 60 + 20.95 / 3600),
-      //   102 + 54.0 / 60 + 22.33 / 3600,
-      //   7.0,
-      // ), // Manna
-
       //A. Empat Titik Paling Barat (Utara-Selatan)
       Lokasi(
         5 + 54 / 60 + 26.32 / 3600,
@@ -589,7 +573,6 @@ class CalendarService {
         106 + 31 / 60 + 53.71 / 3600,
         7,
       ), // 4. Cibeas, Jawa Barat
-
       //B. Poros Tengah (Selatan-Utara)
       Lokasi(
         -(8 + 50 / 60 + 59.7 / 3600),
