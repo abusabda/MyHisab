@@ -9,77 +9,77 @@ void main() {
   final cs = CalendarService();
   final jd = JulianDay();
 
-  final waktuSalatHarian = ss.waktuSalatHarian(
-    tglM: 1,
-    blnM: 1,
-    thnM: 2025,
-    gLon: (107 + 36 / 60),
-    gLat: -(7 + 5 / 60),
-    elev: 0,
-    tmZn: 7,
-    ihty: 2,
-  );
+  // final waktuSalatHarian = ss.waktuSalatHarian(
+  //   tglM: 1,
+  //   blnM: 1,
+  //   thnM: 2025,
+  //   gLon: (107 + 36 / 60),
+  //   gLat: -(7 + 5 / 60),
+  //   elev: 0,
+  //   tmZn: 7,
+  //   ihty: 2,
+  // );
 
-  print(waktuSalatHarian);
+  // print(waktuSalatHarian);
 
-  final waktuSalatBulanan = ss.waktuSalatBulanan(
-    tglM1: 1,
-    blnM1: 1,
-    thnM1: 2025,
-    tglM2: 31,
-    blnM2: 1,
-    thnM2: 2025,
-    gLon: 107 + 37 / 60.0,
-    gLat: -(7 + 5 / 60.0),
-    elev: 0,
-    tmZn: 7,
-    ihty: 2,
-  );
+  // final waktuSalatBulanan = ss.waktuSalatBulanan(
+  //   tglM1: 1,
+  //   blnM1: 1,
+  //   thnM1: 2025,
+  //   tglM2: 31,
+  //   blnM2: 1,
+  //   thnM2: 2025,
+  //   gLon: 107 + 37 / 60.0,
+  //   gLat: -(7 + 5 / 60.0),
+  //   elev: 0,
+  //   tmZn: 7,
+  //   ihty: 2,
+  // );
 
-  print(waktuSalatBulanan);
+  // print(waktuSalatBulanan);
 
-  final arahKiblat = qs.arahQiblat(
-    tglM: 1,
-    blnM: 1,
-    thnM: 2025,
-    gLon: 107 + 37 / 60.0,
-    gLat: -(7 + 5 / 60.0),
-    tmZn: 7,
-    sdp: 2,
-  );
+  // final arahKiblat = qs.arahQiblat(
+  //   tglM: 1,
+  //   blnM: 1,
+  //   thnM: 2025,
+  //   gLon: 107 + 37 / 60.0,
+  //   gLat: -(7 + 5 / 60.0),
+  //   tmZn: 7,
+  //   sdp: 2,
+  // );
 
-  print(arahKiblat);
+  // print(arahKiblat);
 
-  final waktuKiblatBulanan = qs.waktuKiblatBulanan(
-    tglM1: 1,
-    blnM1: 1,
-    thnM1: 2025,
-    tglM2: 31,
-    blnM2: 1,
-    thnM2: 2025,
-    gLon: 107 + 37 / 60.0,
-    gLat: -(7 + 5 / 60.0),
-    elev: 0,
-    tmZn: 7,
-  );
+  // final waktuKiblatBulanan = qs.waktuKiblatBulanan(
+  //   tglM1: 1,
+  //   blnM1: 1,
+  //   thnM1: 2025,
+  //   tglM2: 31,
+  //   blnM2: 1,
+  //   thnM2: 2025,
+  //   gLon: 107 + 37 / 60.0,
+  //   gLat: -(7 + 5 / 60.0),
+  //   elev: 0,
+  //   tmZn: 7,
+  // );
 
-  print(waktuKiblatBulanan);
+  // print(waktuKiblatBulanan);
 
-  final rashdulQiblatTahunan = qs.rashdulQiblatTahunan(
-    thnM1: 2025,
-    thnM2: 2026,
-    tmZn: 7,
-  );
+  // final rashdulQiblatTahunan = qs.rashdulQiblatTahunan(
+  //   thnM1: 2025,
+  //   thnM2: 2026,
+  //   tmZn: 7,
+  // );
 
-  print(rashdulQiblatTahunan);
+  // print(rashdulQiblatTahunan);
 
-  final antipodaQiblatTahunan = qs.antipodaQiblatTahunan(
-    thnM1: 2025,
-    thnM2: 2026,
-    tmZn: 7,
-  );
+  // final antipodaQiblatTahunan = qs.antipodaQiblatTahunan(
+  //   thnM1: 2025,
+  //   thnM2: 2026,
+  //   tmZn: 7,
+  // );
 
-  print(antipodaQiblatTahunan);
+  //print(antipodaQiblatTahunan);
 
   final namaBulanHijriah = [
     "Al-Muharram",
@@ -97,7 +97,7 @@ void main() {
   ];
 
   //input Bulan dan Tahun Hijri
-  final blnH = 9;
+  final blnH = 12;
   final thnH = 1447;
 
   final abqSesuaiLokasi = ab.hisabAwalBulanHijriahSesuaiLokasi(
@@ -128,12 +128,18 @@ void main() {
   final jdAbqTurki = cs.abqTurki(blnH, thnH);
   print("1 $namaBlnH $thnH H (TURKI/KHGT)  : ${jd.jdkm(jdAbqTurki)}");
 
-  final abqMabimsNow = cs.serviceKalenderHijriahMABIMS(20, 3, 2026);
-  print("MABIMS                          : $abqMabimsNow");
+  //input tanggal, bulan, tahun Masehi
 
-  final abqWHNow = cs.serviceKalenderHijriahWH(20, 3, 2026);
-  print("Wujudu Hilal                    : $abqWHNow");
+  final tglM = 27;
+  final blnM = 7;
+  final thnM = 2025;
 
-  final abqTurkiNow = cs.serviceKalenderHijriahTURKI(20, 3, 2026);
-  print("Turki/KHGT                      : $abqTurkiNow");
+  final abqMabimsNow = cs.serviceKalenderHijriahMABIMS(tglM, blnM, thnM);
+  print("MABIMS                         : $abqMabimsNow");
+
+  final abqWHNow = cs.serviceKalenderHijriahWH(tglM, blnM, thnM);
+  print("Wujudu Hilal                   : $abqWHNow");
+
+  final abqTurkiNow = cs.serviceKalenderHijriahTURKI(tglM, blnM, thnM);
+  print("Turki/KHGT                     : $abqTurkiNow");
 }

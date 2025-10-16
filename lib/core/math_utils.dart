@@ -8,6 +8,9 @@ class MathFunction {
   // Modulus
   double mod(double x, double y) => x - y * (x / y).floor();
 
+  double floor(double x) => (x).floorToDouble();
+  double abs(double x) => (x).abs();
+
   // Sign
   int sign(double x) => (x > 0) ? 1 : (x < 0 ? -1 : 0);
 
@@ -20,8 +23,8 @@ class MathFunction {
   String roundTo(double xDec, {int place = 2}) {
     final A = pow(10.0, place.toDouble());
     final H = (xDec >= 0)
-        ? (xDec * A + 0.5).floor() / A
-        : -(xDec.abs() * A + 0.5).floor() / A;
+        ? floor(xDec * A + 0.5) / A
+        : -floor(abs(xDec) * A + 0.5) / A;
     return H.toString();
   }
 
@@ -32,10 +35,10 @@ class MathFunction {
     int secDecPlaces = 2,
     String posNegSign = "",
   }) {
-    final uDHrs = dHrs.abs();
-    double uHrs = uDHrs.floorToDouble();
+    final uDHrs = abs(dHrs);
+    double uHrs = floor(uDHrs);
     final uDMin = (uDHrs - uHrs) * 60.0;
-    double uMin = uDMin.floorToDouble();
+    double uMin = floor(uDMin);
     final uDSec = (uDMin - uMin) * 60.0;
 
     // format detik dengan jumlah desimal sesuai
@@ -96,8 +99,8 @@ class MathFunction {
     int minDecPlaces = 2,
     String posNegSign = "",
   }) {
-    final uDHrs = dHrs.abs();
-    double uHrs = uDHrs.floorToDouble();
+    final uDHrs = abs(dHrs);
+    double uHrs = floor(uDHrs);
     final uDMin = (uDHrs - uHrs) * 60.0;
     String uMin = uDMin.toStringAsFixed(minDecPlaces);
 
@@ -145,10 +148,10 @@ class MathFunction {
     int sdp = 2,
     String posNegSign = "+-",
   }) {
-    final double uDDeg = dDeg.abs();
-    double uDeg = uDDeg.floorToDouble();
+    final double uDDeg = abs(dDeg);
+    double uDeg = floor(uDDeg);
     final double uDMin = (uDDeg - uDeg) * 60.0;
-    double uMin = uDMin.floorToDouble();
+    double uMin = floor(uDMin);
     final double uDSec = (uDMin - uMin) * 60.0;
     String uSec = uDSec.toStringAsFixed(sdp);
 
@@ -229,14 +232,14 @@ class MathFunction {
     String posNegSign = "", // "" atau "+-"
   }) {
     // Nilai absolut untuk dihitung
-    final double uDDeg = dDeg.abs();
+    final double uDDeg = abs(dDeg);
 
     // Derajat
-    String uDeg = (uDDeg.floor()).toStringAsFixed(0);
+    String uDeg = floor(uDDeg).toStringAsFixed(0);
 
     // Menit
     double uDMin = (uDDeg - double.parse(uDeg)) * 60.0;
-    String uMin = (uDMin.floor()).toStringAsFixed(0);
+    String uMin = floor(uDMin).toStringAsFixed(0);
 
     // Detik
     double uDSec = (uDMin - double.parse(uMin)) * 60.0;

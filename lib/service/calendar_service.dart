@@ -602,23 +602,16 @@ class CalendarService {
     final delT = dynamicalTime.deltaT(jdNM);
     final jdNM2 = mo.geocentricConjunction(blnH, thnH, delT, "Ijtimak");
 
-    int irMabims = 2;
-    double timeZone =
-        lokasi[0].tmZn; // Default, akan diganti jika syarat terpenuhi
+    int irMabims = 2; // Default, akan diganti jika syarat terpenuhi
+    double timeZone = lokasi[0].tmZn;
 
-    for (final lokasi in lokasi) {
-      final jdGS = sn.jdGhurubSyams(
-        jdNM,
-        lokasi.gLat,
-        lokasi.gLon,
-        10.0,
-        lokasi.tmZn,
-      );
+    for (final loc in lokasi) {
+      final jdGS = sn.jdGhurubSyams(jdNM, loc.gLat, loc.gLon, 10.0, loc.tmZn);
       final tHlal00 = mo.moonTopocentricAltitude(
         jdGS,
         delT,
-        lokasi.gLon,
-        lokasi.gLat,
+        loc.gLon,
+        loc.gLat,
         10.0,
         1010.0,
         10.0,
@@ -628,13 +621,13 @@ class CalendarService {
 
       if (elong00 >= 6.4 && tHlal00 >= 3) {
         irMabims = 1;
-        timeZone = lokasi.tmZn;
         break;
       }
     }
 
     final jdAbqMabims =
-        ((jdNM2 + 0.5 + timeZone / 24.0).floorToDouble() - 0.5) + irMabims;
+        ((mf.floor(jdNM2 + 0.5 + 0.0 / 24.0)) - 0.0 / 24.0) + irMabims;
+
     return jdAbqMabims.ceilToDouble();
   }
 
@@ -661,14 +654,13 @@ class CalendarService {
     );
 
     int wh = 2;
-    double timeZone = 7;
-    if (tHlal00 > 0) {
+
+    if (tHlal00 > 0 && jdNM2 < jdGS) {
       wh = 1;
-      timeZone = tmZn;
     }
 
-    final jdAbqWH =
-        ((jdNM2 + 0.5 + timeZone / 24.0).floorToDouble() - 0.5) + wh;
+    final jdAbqWH = ((mf.floor(jdNM2 + 0.5 + 0.0 / 24.0)) - 0.0 / 24.0) + wh;
+
     return jdAbqWH.ceilToDouble();
   }
 
