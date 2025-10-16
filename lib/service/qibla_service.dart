@@ -146,10 +146,10 @@ class QiblaService {
     for (int i = 0; i <= intv; i++) {
       thnM = thnM + 1;
       sb.writeln(
-        "Antipoda Qiblat 1           : ${aq.antipodaKabah(thnM, tmZn, 1)}",
+        "Antipoda Qiblat 1          : ${aq.antipodaKabah(thnM, tmZn, 1)}",
       );
       sb.writeln(
-        "Antipoda Qiblat 2           : ${aq.antipodaKabah(thnM, tmZn, 2)}",
+        "Antipoda Qiblat 2          : ${aq.antipodaKabah(thnM, tmZn, 2)}",
       );
     }
     return sb.toString();

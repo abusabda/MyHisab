@@ -81,10 +81,29 @@ void main() {
 
   print(antipodaQiblatTahunan);
 
+  final namaBulanHijriah = [
+    "Al-Muharram",
+    "Shafar",
+    "Rabiul Awwal",
+    "Rabiul Akhir",
+    "Jumadal Ula",
+    "Jumadal Akhirah",
+    "Rajab",
+    "Syaban",
+    "Ramadhan",
+    "Syawwal",
+    "Zulqadah",
+    "Zulhijjah",
+  ];
+
+  //input Bulan dan Tahun Hijri
+  final blnH = 10;
+  final thnH = 1447;
+
   final abqSesuaiLokasi = ab.hisabAwalBulanHijriahSesuaiLokasi(
     nmLokasi: "Pelabuhan Ratu",
-    blnH: 10,
-    thnH: 1444,
+    blnH: blnH,
+    thnH: thnH,
     gLon: (106 + 33 / 60 + 27.8 / 3600),
     gLat: -(7 + 1 / 60 + 44.6 / 3600),
     elev: 52.685,
@@ -98,9 +117,23 @@ void main() {
 
   print(abqSesuaiLokasi); // tampilkan semua output sekaligus
 
-  final jdAbqMabims = cs.abqMabims(5, 1452);
-  print("Awal Bulan Hijriah Mabims: ${jd.jdkm(jdAbqMabims)}");
+  final namaBlnH = namaBulanHijriah[blnH - 1];
 
-  final abqMabimsNow = cs.serviceKalenderHijriahMABIMS(30, 8, 2030);
-  print(abqMabimsNow);
+  final jdAbqMabims = cs.abqMabims(blnH, thnH);
+  print("Awal Bulan $namaBlnH (MABIMS)      : ${jd.jdkm(jdAbqMabims)}");
+
+  final jdAbqWH = cs.abqWujudulHilal(blnH, thnH);
+  print("Awal Bulan $namaBlnH (Wujud Hilal) : ${jd.jdkm(jdAbqWH)}");
+
+  final jdAbqTurki = cs.abqTurki(blnH, thnH);
+  print("Awal Bulan $namaBlnH (TURKI/KHGT)  : ${jd.jdkm(jdAbqTurki)}");
+
+  final abqMabimsNow = cs.serviceKalenderHijriahMABIMS(20, 3, 2026);
+  print("MABIMS                           : $abqMabimsNow");
+
+  final abqWHNow = cs.serviceKalenderHijriahWH(20, 3, 2026);
+  print("WH                               : $abqWHNow");
+
+  final abqTurkiNow = cs.serviceKalenderHijriahTURKI(20, 3, 2026);
+  print("Turki                            : $abqTurkiNow");
 }

@@ -799,41 +799,55 @@ class SunFunction {
     double jdNM,
     double gLat,
     double gLon,
-    double elev,
+    double gAlt,
     double tmZn,
   ) {
-    double haS = 0.0;
-    double kwd = 0.0;
+    // ** Deklarasi Variabel **
+    double cjdn;
+    double jdGS = 0.0;
+    double jdEGS;
+    double dltS;
+    double sdS;
+    double eot;
+    double rfS;
+    double dip;
+    double altTS;
+    double coshaS;
+    double haS;
+    double kwd;
     double jSunSet = 17.0;
 
-    // Sama dengan math.floor
-    double cJDN = (jdNM + 0.5 + (tmZn / 24.0)).floorToDouble();
+    // ** Proses Perhitungan **
+    cjdn = (jdNM + 0.5 + (0 / 24.0)).floorToDouble();
 
-    for (int i = 1; i <= 2; i++) {
-      double jdGS = cJDN - 0.5 + (jSunSet - tmZn) / 24;
-      double jdeGS = jdGS + dt.deltaT(jdGS) / 86400;
-      double dltS = sunGeocentricDeclination(jdeGS, 0.0);
-      double sdS = sunGeocentricSemidiameter(jdeGS, 0.0);
-      double eoT = equationOfTime(jdeGS, 0.0);
-      double rfS = 34.16 / 60;
-      double dip = 2.1 * math.sqrt(elev) / 60;
-      double altS = 0 - sdS - rfS - dip + 0.0024;
+    for (int itr = 1; itr <= 2; itr++) {
+      jdGS = cjdn - 0.5 + (jSunSet - tmZn) / 24.0;
+      jdEGS = jdGS + dt.deltaT(jdGS) / 86400.0;
 
-      double coshaS =
-          (math.sin(mf.rad(altS)) -
+      dltS = sunGeocentricDeclination(jdEGS, 0);
+      sdS = sunGeocentricSemidiameter(jdEGS, 0);
+      eot = equationOfTime(jdEGS, 0);
+
+      rfS = 34.16 / 60.0;
+      dip = 2.1 * math.sqrt(gAlt) / 60.0;
+      altTS = -(sdS + rfS + dip - 0.0024);
+
+      coshaS =
+          (math.sin(mf.rad(altTS)) -
               math.sin(mf.rad(gLat)) * math.sin(mf.rad(dltS))) /
           (math.cos(mf.rad(gLat)) * math.cos(mf.rad(dltS)));
 
       if (coshaS.abs() < 1) {
         haS = mf.deg(math.acos(coshaS));
-        kwd = gLon / 15 - tmZn;
-        jSunSet = haS / 15 + 12 - eoT - kwd;
+        kwd = gLon / 15.0 - tmZn;
+        jSunSet = haS / 15.0 + 12.0 - eot - kwd;
+        jdGS = cjdn - 0.5 + (jSunSet - tmZn) / 24.0;
       } else {
-        jSunSet = 0.0;
+        jdGS = 0.0;
       }
     }
 
-    double jdGS = cJDN - 0.5 + (jSunSet - tmZn) / 24;
+    // ** Hasil Perhitungan **
     return jdGS;
   }
 }

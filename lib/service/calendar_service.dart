@@ -9,12 +9,30 @@ import 'package:myhisab/core/moon_longitude.dart';
 import 'package:myhisab/core/sun_function.dart';
 import 'package:myhisab/service/moon_service.dart';
 
+//final mf = MathFunction();
+final julianDay = JulianDay();
+final dynamicalTime = DynamicalTime();
+final sn = SunFunction();
+final mf = MathFunction();
+final ml = MoonLongitude();
+final mb = MoonLatitude();
+final md = MoonDistance();
+final mo = MoonFunction();
+
 class Lokasi {
   final double gLat;
   final double gLon;
   final double tmZn;
 
   Lokasi(this.gLat, this.gLon, this.tmZn);
+}
+
+class Lokasi2 {
+  final double gLat;
+  final double gLon;
+  final double tmZn;
+
+  Lokasi2(this.gLat, this.gLon, this.tmZn);
 }
 
 final ab = CalendarService();
@@ -36,16 +54,6 @@ class CalendarService {
     int tbhHari = 0,
     int optKriteria = 1, // 1 = Imkan Rukyat, 2 = Wujudul Hilal
   }) {
-    final julianDay = JulianDay();
-    final dynamicalTime = DynamicalTime();
-
-    final sn = SunFunction();
-    final mf = MathFunction();
-    final ml = MoonLongitude();
-    final mb = MoonLatitude();
-    final md = MoonDistance();
-    final mo = MoonFunction();
-
     String getZonaWaktu(double tmZn) {
       switch (tmZn) {
         case 7:
@@ -630,6 +638,143 @@ class CalendarService {
     return jdAbqMabims.ceilToDouble();
   }
 
+  double abqWujudulHilal(int blnH, int thnH) {
+    double gLon = 110 + 21 / 60;
+    double gLat = -(7 + 48 / 60);
+    double tmZn = 7;
+    double elev = 30;
+
+    final jdNM = mo.geocentricConjunction(blnH, thnH, 0.0, "Ijtimak");
+    final delT = dynamicalTime.deltaT(jdNM);
+    final jdNM2 = mo.geocentricConjunction(blnH, thnH, delT, "Ijtimak");
+
+    final jdGS = sn.jdGhurubSyams(jdNM2, gLat, gLon, elev, tmZn);
+    final tHlal00 = mo.moonTopocentricAltitude(
+      jdGS,
+      delT,
+      gLon,
+      gLat,
+      10.0,
+      1010.0,
+      10.0,
+      "htou",
+    );
+
+    int wh = 2;
+    double timeZone = 7;
+    if (tHlal00 > 0) {
+      wh = 1;
+      timeZone = tmZn;
+    }
+
+    final jdAbqWH =
+        ((jdNM2 + 0.5 + timeZone / 24.0).floorToDouble() - 0.5) + wh;
+    return jdAbqWH.ceilToDouble();
+  }
+
+  // Fungsi Hisab Awal Bulan Hijriah Menurut IR TURKI/KHGT
+
+  double abqTurki(int blnH, int thnH) {
+    final lokasi = [
+      Lokasi2(65, -166.7, -9),
+      Lokasi2(54.47, -164.91, -9),
+      Lokasi2(60, -139.6304, -9),
+      Lokasi2(55.9182, -133.8442, -8),
+      Lokasi2(50, -127.45, -8),
+      Lokasi2(47, -124.21, -8),
+      Lokasi2(34, -118.92, -8),
+      Lokasi2(33, -117.33, -8),
+      Lokasi2(20, -105.5555, -6),
+      Lokasi2(14, -91.557, -6),
+      Lokasi2(13, -87.62, -6),
+      Lokasi2(9, -83.65, -6),
+      Lokasi2(7.25, -80.9333, -5),
+      Lokasi2(7, -77.692, -5),
+      Lokasi2(3, -77.674, -5),
+      Lokasi2(0, -80.1, -5),
+      Lokasi2(-3, -79.83, -5),
+      Lokasi2(-8, -79.235, -5),
+      Lokasi2(-16, -74.0254, -4),
+      Lokasi2(-24, -70.5235, -4),
+      Lokasi2(-32, -71.5397, -4),
+      Lokasi2(-40, -73.726, -4),
+      Lokasi2(-44, -73.2683, -3),
+      Lokasi2(-49, -75.6755, -3),
+      Lokasi2(-55.9385, -67.2877, -3),
+    ];
+
+    final jdNM = mo.geocentricConjunction(blnH, thnH, 0.0, "Ijtimak");
+    final dT = dynamicalTime.deltaT(jdNM);
+    final jdNM2 = mo.geocentricConjunction(blnH, thnH, dT, "Ijtimak");
+
+    int irTurki = 2;
+
+    bool isBefore00UT = false;
+    bool isAfter00UT = false;
+
+    for (final loc in lokasi) {
+      final jdGS = sn.jdGhurubSyams(jdNM, loc.gLat, loc.gLon, 0, loc.tmZn);
+      final tHlal00 = mo.moonGeocentricAltitude(jdGS, dT, loc.gLon, loc.gLat);
+      final elong00 = mo.moonSunGeocentricElongation(jdGS, dT);
+      final grb00 =
+          double.tryParse(
+            julianDay.jdkm(jdGS, loc.tmZn, "Jam Des").toString(),
+          ) ??
+          0.0;
+
+      final jSunSUT0 = grb00 - loc.tmZn;
+
+      if (elong00 >= 8 && tHlal00 >= 5) {
+        if (jSunSUT0 < 24) {
+          isBefore00UT = true;
+          irTurki = 1;
+          break;
+        } else {
+          isAfter00UT = true;
+        }
+      }
+    }
+
+    if (!isBefore00UT && isAfter00UT) {
+      final jdFP = (jdNM2 + 0.5).floorToDouble() - 0.5 + 17 / 24.0;
+      final lonNZ = 174 + 48 / 60.0;
+      final latNZ = -(41 + 19 / 60.0);
+      final tzNZ = 12.0;
+      final kwd = (lonNZ - (tzNZ * 15)) / 15.0;
+      final dek = sn.sunGeocentricDeclination(jdFP, 0);
+      final eqt = sn.equationOfTime(jdFP, 0);
+      final hmF = -18.0; // default untuk fajar -18 derajat
+      final hAm = mf.deg(
+        math.acos(
+          (math.sin(mf.rad(hmF)) -
+                  math.sin(mf.rad(latNZ)) * math.sin(mf.rad(dek))) /
+              (math.cos(mf.rad(latNZ)) * math.cos(mf.rad(dek))),
+        ),
+      );
+      final awf = 12 - eqt - hAm / 15 - kwd;
+      final awfUTC = mf.mod((awf - 12), 24);
+      final jdFUTC = (jdNM2 + 0.5).floorToDouble() - 0.5 + awfUTC / 24.0;
+
+      final wIjtimak =
+          double.tryParse(julianDay.jdkm(jdNM2, 0, "Jam Des").toString()) ??
+          0.0;
+      final wFajarNZ =
+          double.tryParse(julianDay.jdkm(jdFUTC, 0, "Jam Des").toString()) ??
+          0.0;
+
+      if (wIjtimak < wFajarNZ) {
+        irTurki = 1; // Ijtimak sebelum fajar
+      } else {
+        irTurki = 2; // Ijtimak setelah fajar
+      }
+    }
+
+    final abq =
+        ((jdNM2 + 0.5 + 0.0 / 24.0).floorToDouble()) - 0.0 / 24.0 + irTurki;
+
+    return abq;
+  }
+
   final namaBulanHijriah = [
     "Al-Muharram",
     "Shafar",
@@ -663,6 +808,104 @@ class CalendarService {
       abqList.add(ab.abqMabims(blnH, thnH));
     }
     abqList.add(ab.abqMabims(1, thnH + 1)); // Muharram tahun berikutnya
+
+    // Loop hari dari tiap ABQ ke ABQ berikutnya
+    for (var i = 0; i < abqList.length - 1; i++) {
+      final jdStart = abqList[i].toInt();
+      final jdEnd = abqList[i + 1].toInt();
+
+      final blnH = (i == 0)
+          ? 12
+          : (i == 13)
+          ? 12
+          : i;
+      final thnHij = (i == 0)
+          ? thnH - 1
+          : (i >= 1 && i <= 12)
+          ? thnH
+          : thnH + 1;
+
+      final namaBlnH = namaBulanHijriah[blnH - 1];
+
+      var nomorUrut = 1;
+      for (var jdHari = jdStart; jdHari < jdEnd; jdHari++) {
+        if (jdHari == jd2.toInt()) {
+          return "${julianDay.jdkm(jdHari.toDouble())} M | $nomorUrut $namaBlnH $thnHij H";
+        }
+        nomorUrut++;
+      }
+    }
+
+    return "Tidak ditemukan";
+  }
+
+  String serviceKalenderHijriahWH(int tglM, int blnM, int thnM) {
+    final jd = julianDay.kmjd(tglM, blnM, thnM);
+    final cjdnM = (jd + 0.5).floorToDouble();
+    final jd2 = jd.ceilToDouble();
+
+    final thnH = int.parse(
+      julianDay
+          .cjdnKH(cjdnM.toInt(), hCalE: 2, hCalL: 2, optResult: "THNH")
+          .toString(),
+    );
+
+    // Kumpulkan semua ABQ
+    final abqList = <double>[];
+    abqList.add(ab.abqWujudulHilal(12, thnH - 1)); // Zulhijjah tahun sebelumnya
+    for (var blnH = 1; blnH <= 12; blnH++) {
+      abqList.add(ab.abqWujudulHilal(blnH, thnH));
+    }
+    abqList.add(ab.abqWujudulHilal(1, thnH + 1)); // Muharram tahun berikutnya
+
+    // Loop hari dari tiap ABQ ke ABQ berikutnya
+    for (var i = 0; i < abqList.length - 1; i++) {
+      final jdStart = abqList[i].toInt();
+      final jdEnd = abqList[i + 1].toInt();
+
+      final blnH = (i == 0)
+          ? 12
+          : (i == 13)
+          ? 12
+          : i;
+      final thnHij = (i == 0)
+          ? thnH - 1
+          : (i >= 1 && i <= 12)
+          ? thnH
+          : thnH + 1;
+
+      final namaBlnH = namaBulanHijriah[blnH - 1];
+
+      var nomorUrut = 1;
+      for (var jdHari = jdStart; jdHari < jdEnd; jdHari++) {
+        if (jdHari == jd2.toInt()) {
+          return "${julianDay.jdkm(jdHari.toDouble())} M | $nomorUrut $namaBlnH $thnHij H";
+        }
+        nomorUrut++;
+      }
+    }
+
+    return "Tidak ditemukan";
+  }
+
+  String serviceKalenderHijriahTURKI(int tglM, int blnM, int thnM) {
+    final jd = julianDay.kmjd(tglM, blnM, thnM);
+    final cjdnM = (jd + 0.5).floorToDouble();
+    final jd2 = jd.ceilToDouble();
+
+    final thnH = int.parse(
+      julianDay
+          .cjdnKH(cjdnM.toInt(), hCalE: 2, hCalL: 2, optResult: "THNH")
+          .toString(),
+    );
+
+    // Kumpulkan semua ABQ
+    final abqList = <double>[];
+    abqList.add(ab.abqTurki(12, thnH - 1)); // Zulhijjah tahun sebelumnya
+    for (var blnH = 1; blnH <= 12; blnH++) {
+      abqList.add(ab.abqTurki(blnH, thnH));
+    }
+    abqList.add(ab.abqTurki(1, thnH + 1)); // Muharram tahun berikutnya
 
     // Loop hari dari tiap ABQ ke ABQ berikutnya
     for (var i = 0; i < abqList.length - 1; i++) {
