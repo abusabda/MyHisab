@@ -7,7 +7,7 @@ import 'package:myhisab/core/moon_function.dart';
 import 'package:myhisab/core/moon_latitude.dart';
 import 'package:myhisab/core/moon_longitude.dart';
 import 'package:myhisab/core/sun_function.dart';
-import 'package:myhisab/service/moon_service.dart';
+//import 'package:myhisab/service/moon_service.dart';
 
 //final mf = MathFunction();
 final julianDay = JulianDay();

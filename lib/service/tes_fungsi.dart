@@ -120,20 +120,20 @@ void main() {
   final namaBlnH = namaBulanHijriah[blnH - 1];
 
   final jdAbqMabims = cs.abqMabims(blnH, thnH);
-  print("Awal Bulan $namaBlnH (MABIMS)      : ${jd.jdkm(jdAbqMabims)}");
+  print("1 $namaBlnH $thnH H (MABIMS)      : ${jd.jdkm(jdAbqMabims)}");
 
   final jdAbqWH = cs.abqWujudulHilal(blnH, thnH);
-  print("Awal Bulan $namaBlnH (Wujud Hilal) : ${jd.jdkm(jdAbqWH)}");
+  print("1 $namaBlnH $thnH H (Wujud Hilal) : ${jd.jdkm(jdAbqWH)}");
 
   final jdAbqTurki = cs.abqTurki(blnH, thnH);
-  print("Awal Bulan $namaBlnH (TURKI/KHGT)  : ${jd.jdkm(jdAbqTurki)}");
+  print("1 $namaBlnH $thnH H (TURKI/KHGT)  : ${jd.jdkm(jdAbqTurki)}");
 
   final abqMabimsNow = cs.serviceKalenderHijriahMABIMS(20, 3, 2026);
-  print("MABIMS                           : $abqMabimsNow");
+  print("MABIMS                         : $abqMabimsNow");
 
   final abqWHNow = cs.serviceKalenderHijriahWH(20, 3, 2026);
-  print("WH                               : $abqWHNow");
+  print("WH                             : $abqWHNow");
 
   final abqTurkiNow = cs.serviceKalenderHijriahTURKI(20, 3, 2026);
-  print("Turki                            : $abqTurkiNow");
+  print("Turki                          : $abqTurkiNow");
 }
