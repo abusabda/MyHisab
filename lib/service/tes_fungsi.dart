@@ -97,7 +97,7 @@ void main() {
   ];
 
   //input Bulan dan Tahun Hijri
-  final blnH = 10;
+  final blnH = 9;
   final thnH = 1447;
 
   final abqSesuaiLokasi = ab.hisabAwalBulanHijriahSesuaiLokasi(
@@ -129,11 +129,11 @@ void main() {
   print("1 $namaBlnH $thnH H (TURKI/KHGT)  : ${jd.jdkm(jdAbqTurki)}");
 
   final abqMabimsNow = cs.serviceKalenderHijriahMABIMS(20, 3, 2026);
-  print("MABIMS                         : $abqMabimsNow");
+  print("MABIMS                          : $abqMabimsNow");
 
   final abqWHNow = cs.serviceKalenderHijriahWH(20, 3, 2026);
-  print("WH                             : $abqWHNow");
+  print("Wujudu Hilal                    : $abqWHNow");
 
   final abqTurkiNow = cs.serviceKalenderHijriahTURKI(20, 3, 2026);
-  print("Turki                          : $abqTurkiNow");
+  print("Turki/KHGT                      : $abqTurkiNow");
 }
