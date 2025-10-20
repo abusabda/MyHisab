@@ -603,7 +603,6 @@ class CalendarService {
     final jdNM2 = mo.geocentricConjunction(blnH, thnH, delT, "Ijtimak");
 
     int irMabims = 2; // Default, akan diganti jika syarat terpenuhi
-    double timeZone = lokasi[0].tmZn;
 
     for (final loc in lokasi) {
       final jdGS = sn.jdGhurubSyams(jdNM, loc.gLat, loc.gLon, 10.0, loc.tmZn);
@@ -745,7 +744,7 @@ class CalendarService {
       );
       final awf = 12 - eqt - hAm / 15 - kwd;
       final awfUTC = mf.mod((awf - 12), 24);
-      final jdFUTC = (jdNM2 + 0.5).floorToDouble() - 0.5 + awfUTC / 24.0;
+      final jdFUTC = mf.floor(jdNM2 + 0.5) - 0.5 + awfUTC / 24.0;
 
       final wIjtimak =
           double.tryParse(julianDay.jdkm(jdNM2, 0, "Jam Des").toString()) ??
@@ -761,8 +760,7 @@ class CalendarService {
       }
     }
 
-    final abq =
-        ((jdNM2 + 0.5 + 0.0 / 24.0).floorToDouble()) - 0.0 / 24.0 + irTurki;
+    final abq = ((mf.floor(jdNM2 + 0.5 + 0.0 / 24.0)) - 0.0 / 24.0) + irTurki;
 
     return abq;
   }

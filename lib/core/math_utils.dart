@@ -19,6 +19,11 @@ class MathFunction {
     return value.toStringAsFixed(decimals);
   }
 
+  double trunc(double value, [int decimals = 2]) {
+    final num mod = pow(10.0, decimals);
+    return (value * mod).truncateToDouble() / mod;
+  }
+
   // Pembulatan manual ala RoundTo
   String roundTo(double xDec, {int place = 2}) {
     final A = pow(10.0, place.toDouble());
@@ -26,6 +31,11 @@ class MathFunction {
         ? floor(xDec * A + 0.5) / A
         : -floor(abs(xDec) * A + 0.5) / A;
     return H.toString();
+  }
+
+  double roundUp(double value, int decimals) {
+    final mod = pow(10.0, decimals);
+    return (value * mod).ceil() / mod;
   }
 
   // Format jam HH:MM:SS
@@ -298,8 +308,8 @@ class MathFunction {
     }
   }
 
-  // Interpolasi 5 nilai
-  double interpolationFromFiveTabularValues(
+  // interpolation From Five Tabular Values
+  double interp5(
     double xM2,
     double xM1,
     double x00,
