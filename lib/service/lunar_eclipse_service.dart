@@ -366,9 +366,9 @@ class LunarEclipseService {
     double magP = (1 / (2 * sm)) * (l1 - d);
     double magU = (1 / (2 * sm)) * (l2 - d);
 
-    double tm1 = 1 / n * math.sqrt(math.pow(l1, 2) - math.pow(d, 2));
-    double tm2 = 1 / n * math.sqrt(math.pow(l2, 2) - math.pow(d, 2));
-    double tm3 = 1 / n * math.sqrt(math.pow(l3, 2) - math.pow(d, 2));
+    double tm1 = 1 / n * math.sqrt(l1 * l1 - d * d);
+    double tm2 = 1 / n * math.sqrt(l2 * l2 - d * d);
+    double tm3 = 1 / n * math.sqrt(l3 * l3 - d * d);
 
     double durP = tm1 * 2;
     double durU = tm2 * 2;
@@ -397,92 +397,6 @@ class LunarEclipseService {
     } else {
       lek = 0; //"TIDAK ADA GERHANA";
     }
-
-    // Azimuth dan Altitude tiap kontak gerhana
-    final azmP1 = mo.moonTopocentricAzimuth(p1, dt, gLon, gLat, elev);
-    final azmU1 = mo.moonTopocentricAzimuth(u1, dt, gLon, gLat, elev);
-    final azmU2 = mo.moonTopocentricAzimuth(u2, dt, gLon, gLat, elev);
-    final azmMx = mo.moonTopocentricAzimuth(mx, dt, gLon, gLat, elev);
-    final azmU3 = mo.moonTopocentricAzimuth(u3, dt, gLon, gLat, elev);
-    final azmU4 = mo.moonTopocentricAzimuth(u4, dt, gLon, gLat, elev);
-    final azmP4 = mo.moonTopocentricAzimuth(p4, dt, gLon, gLat, elev);
-
-    final altP1 = mo.moonTopocentricAltitude(
-      p1,
-      dt,
-      gLon,
-      gLat,
-      elev,
-      1010.0,
-      10.0,
-      "htc",
-    );
-
-    final altU1 = mo.moonTopocentricAltitude(
-      u1,
-      dt,
-      gLon,
-      gLat,
-      elev,
-      1010.0,
-      10.0,
-      "htc",
-    );
-
-    final altU2 = mo.moonTopocentricAltitude(
-      u2,
-      dt,
-      gLon,
-      gLat,
-      elev,
-      1010.0,
-      10.0,
-      "htc",
-    );
-
-    final altMx = mo.moonTopocentricAltitude(
-      mx,
-      dt,
-      gLon,
-      gLat,
-      elev,
-      1010.0,
-      10.0,
-      "htc",
-    );
-
-    final altU3 = mo.moonTopocentricAltitude(
-      u3,
-      dt,
-      gLon,
-      gLat,
-      elev,
-      1010.0,
-      10.0,
-      "htc",
-    );
-
-    final altU4 = mo.moonTopocentricAltitude(
-      u4,
-      dt,
-      gLon,
-      gLat,
-      elev,
-      1010.0,
-      10.0,
-      "htc",
-    );
-
-    final altP4 = mo.moonTopocentricAltitude(
-      p4,
-      dt,
-      gLon,
-      gLat,
-      elev,
-      1010.0,
-      10.0,
-      "htc",
-    );
 
     // =======================================
     // Return berdasarkan OptResult
@@ -607,36 +521,6 @@ class LunarEclipseService {
         return durU;
       case "DurT":
         return durT;
-
-      case "AzmP1":
-        return azmP1;
-      case "AzmU1":
-        return azmU1;
-      case "AzmU2":
-        return azmU2;
-      case "AzmMx":
-        return azmMx;
-      case "AzmU3":
-        return azmU3;
-      case "AzmU4":
-        return azmU4;
-      case "AzmP4":
-        return azmP4;
-
-      case "AltP1":
-        return altP1;
-      case "AltU1":
-        return altU1;
-      case "AltU2":
-        return altU2;
-      case "AltMx":
-        return altMx;
-      case "AltU3":
-        return altU3;
-      case "AltU4":
-        return altU4;
-      case "AltP4":
-        return altP4;
 
       default:
         return mx;

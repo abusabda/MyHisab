@@ -216,15 +216,7 @@ void main() {
   ];
 
   for (var e in elements) {
-    final val = le.lunarEclipse(
-      hijriMonth: blnH2,
-      hijriYear: thnH2,
-      gLon: gLon,
-      gLat: gLat,
-      elev: elev,
-      tmZn: tmZn,
-      optResult: e,
-    );
+    final val = le.lBesselian(blnH2, thnH2, e);
 
     String valStr;
 
@@ -322,11 +314,13 @@ void main() {
         ? mf.dhhms(jamDes, optResult: "HH:MM:SS", secDecPlaces: 1)
         : mf.dhhms(jamDes, optResult: "HH:MM:SS", secDecPlaces: 0);
 
+    final dltT = dt.deltaT(jdVal);
+
     // Hitung azimut (satu kali saja, ringan)
-    final azmVal = mo.moonTopocentricAzimuth(jdVal, 0.0, gLon, gLat, elev);
+    final azmVal = mo.moonTopocentricAzimuth(jdVal, dltT, gLon, gLat, elev);
     final altVal = mo.moonTopocentricAltitude(
       jdVal,
-      0.0,
+      dltT,
       gLon,
       gLat,
       elev,
@@ -343,11 +337,13 @@ void main() {
     // Format kolom azimut, beri 2 spasi tambahan di awal untuk rapih
     final azmText = (azmVal.isNaN || azmVal == 0.0)
         ? ""
-        : "  | Azm: ${azmVal.toStringAsFixed(1).padLeft(0)}°";
+        : "  | Azm: ${mf.dddms(azmVal)}";
+    //: "  | Azm: ${azmVal.toStringAsFixed(1).padLeft(0)}°";
 
     final altText = (azmVal.isNaN || azmVal == 0.0)
         ? ""
-        : "  | Alt: ${altVal.toStringAsFixed(1).padLeft(0)}°";
+        : "  | Alt: ${mf.dddms(altVal)}";
+    //: "  | Alt: ${altVal.toStringAsFixed(1).padLeft(0)}°";
 
     print("${label.padRight(20)} : $waktuPad $azmText $altText");
   }
@@ -396,7 +392,7 @@ void main() {
     }
   }
 
-  if (jdMax != null && !jdMax.isNaN) {
+  if (jdMax != null && !jdMax.isNaN && jdMax != 0.0) {
     final jdMx = jdMax;
     final delT = dt.deltaT(jdMx);
 
@@ -413,20 +409,44 @@ void main() {
     final hpMoon = mo.moonEquatorialHorizontalParallax(jdMx, delT);
 
     print("\nData Matahari pada saat Puncak Gerhana:");
-    print("R.A: ${mf.dhhms(arSun, optResult: "HHMMSS", secDecPlaces: 1)}");
-    print("Dec: ${mf.dddms(deSun, optResult: "DD:MM:SS", sdp: 1)}");
-    print("S.D: ${mf.dddms(sdSun, optResult: "DD:MM:SS", sdp: 1)}");
-    print("H.P: ${mf.dddms(hpSun, optResult: "DD:MM:SS", sdp: 1)}");
+    print(
+      "${'R.A'.padRight(5)}: ${mf.dhhms(arSun, optResult: "HHMMSS", secDecPlaces: 1)}",
+    );
+    print(
+      "${'Dec'.padRight(5)}: ${mf.dddms(deSun, optResult: "DD:MM:SS", sdp: 1)}",
+    );
+    print(
+      "${'S.D'.padRight(5)}: ${mf.dddms(sdSun, optResult: "DD:MM:SS", sdp: 1)}",
+    );
+    print(
+      "${'H.P'.padRight(5)}: ${mf.dddms(hpSun, optResult: "DD:MM:SS", sdp: 1)}",
+    );
 
     print("\nData Bulan pada saat Puncak Gerhana:");
-    print("R.A: ${mf.dhhms(arMoon, optResult: "HHMMSS", secDecPlaces: 1)}");
-    print("Dec: ${mf.dddms(deMoon, optResult: "DD:MM:SS", sdp: 1)}");
-    print("S.D: ${mf.dddms(sdMoon, optResult: "DD:MM:SS", sdp: 1)}");
-    print("H.P: ${mf.dddms(hpMoon, optResult: "DD:MM:SS", sdp: 1)}");
+    print(
+      "${'R.A'.padRight(5)}: ${mf.dhhms(arMoon, optResult: "HHMMSS", secDecPlaces: 1)}",
+    );
+    print(
+      "${'Dec'.padRight(5)}: ${mf.dddms(deMoon, optResult: "DD:MM:SS", sdp: 1)}",
+    );
+    print(
+      "${'S.D'.padRight(5)}: ${mf.dddms(sdMoon, optResult: "DD:MM:SS", sdp: 1)}",
+    );
+    print(
+      "${'H.P'.padRight(5)}: ${mf.dddms(hpMoon, optResult: "DD:MM:SS", sdp: 1)}",
+    );
+  } else {
+    print("\nData Matahari pada saat Puncak Gerhana:");
+    print("${'R.A'.padRight(5)}: -");
+    print("${'Dec'.padRight(5)}: -");
+    print("${'S.D'.padRight(5)}: -");
+    print("${'H.P'.padRight(5)}: -");
 
-    // ===================== Tampilkan Hasil =====================
-
-    //print("\n--- Data Matahari ---");
+    print("\nData Bulan pada saat Puncak Gerhana:");
+    print("${'R.A'.padRight(5)}: -");
+    print("${'Dec'.padRight(5)}: -");
+    print("${'S.D'.padRight(5)}: -");
+    print("${'H.P'.padRight(5)}: -");
   }
 
   print("========================================");
