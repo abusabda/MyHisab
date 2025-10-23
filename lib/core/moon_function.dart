@@ -680,47 +680,42 @@ class MoonFunction {
         kII = 0.0;
     }
 
-    k = (k).floor() + kII;
+    k = mf.floor(k) + kII;
 
     final t = k / 1236.85;
+    final t2 = t * t;
+    final t3 = t2 * t;
+    final t4 = t3 * t;
 
     final jdeMMP =
         2451550.09766 +
         29.530588861 * k +
-        0.00015437 * math.pow(t, 2) -
-        0.00000015 * math.pow(t, 3) +
-        0.00000000073 * math.pow(t, 4);
+        0.00015437 * t2 -
+        0.00000015 * t3 +
+        0.00000000073 * t4;
 
-    final e = 1 - 0.002516 * t - 0.0000074 * math.pow(t, 2);
+    final e = 1 - 0.002516 * t - 0.0000074 * t2;
 
-    var m =
-        2.5534 +
-        29.1053567 * k -
-        0.0000014 * math.pow(t, 2) -
-        0.00000011 * math.pow(t, 3);
+    var m = 2.5534 + 29.1053567 * k - 0.0000014 * t2 - 0.00000011 * t3;
     m = mf.rad(mf.mod(m, 360));
 
     var mp =
         201.5643 +
         385.81693528 * k +
-        0.0107582 * math.pow(t, 2) +
-        0.00001238 * math.pow(t, 3) -
-        0.000000058 * math.pow(t, 4);
+        0.0107582 * t2 +
+        0.00001238 * t3 -
+        0.000000058 * t4;
     mp = mf.rad(mf.mod(mp, 360));
 
     var f =
         160.7108 +
         390.67050284 * k -
-        0.0016118 * math.pow(t, 2) -
-        0.00000227 * math.pow(t, 3) +
-        0.000000011 * math.pow(t, 4);
+        0.0016118 * t2 -
+        0.00000227 * t3 +
+        0.000000011 * t4;
     f = mf.rad(mf.mod(f, 360));
 
-    var om =
-        124.7746 -
-        1.56375588 * k +
-        0.0020672 * math.pow(t, 2) +
-        0.00000215 * math.pow(t, 3);
+    var om = 124.7746 - 1.56375588 * k + 0.0020672 * t2 + 0.00000215 * t3;
     om = mf.rad(mf.mod(om, 360));
 
     final a1 = mf.rad(mf.mod(299.77 + 0.107408 * k - 0.009173 * t * t, 360));
@@ -748,7 +743,7 @@ class MoonFunction {
             0.01039 * math.sin(2 * f) +
             0.00739 * e * math.sin(mp - m) -
             0.00514 * e * math.sin(mp + m) +
-            0.00208 * math.pow(e, 2) * math.sin(2 * m) -
+            0.00208 * e * e * math.sin(2 * m) -
             0.00111 * math.sin(mp - 2 * f) -
             0.00057 * math.sin(mp + 2 * f) +
             0.00056 * e * math.sin(2 * mp + m) -
@@ -777,7 +772,7 @@ class MoonFunction {
             0.01043 * math.sin(2 * f) +
             0.00734 * e * math.sin(mp - m) -
             0.00514 * e * math.sin(mp + m) +
-            0.00209 * math.pow(e, 2) * math.sin(2 * m) -
+            0.00209 * e * e * math.sin(2 * m) -
             0.00111 * math.sin(mp - 2 * f) -
             0.00057 * math.sin(mp + 2 * f) +
             0.00056 * e * math.sin(2 * mp + m) -
@@ -807,14 +802,14 @@ class MoonFunction {
             0.00862 * math.sin(2 * mp) +
             0.00804 * math.sin(2 * f) +
             0.00454 * e * math.sin(mp - m) +
-            0.00204 * math.pow(e, 2) * math.sin(2 * m) -
+            0.00204 * e * e * math.sin(2 * m) -
             0.0018 * math.sin(mp - 2 * f) -
             0.0007 * math.sin(mp + 2 * f) -
             0.0004 * math.sin(3 * mp) -
             0.00034 * e * math.sin(2 * mp - m) +
             0.00032 * e * math.sin(m + 2 * f) +
             0.00032 * e * math.sin(m - 2 * f) -
-            0.00028 * math.pow(e, 2) * math.sin(mp + 2 * m) +
+            0.00028 * e * e * math.sin(mp + 2 * m) +
             0.00027 * e * math.sin(2 * mp + m) -
             0.00017 * math.sin(om) -
             0.00005 * math.sin(mp - m - 2 * f) +
@@ -874,8 +869,9 @@ class MoonFunction {
     switch (eclipseKind) {
       case 1:
         k =
-            (hijriMonth.toDouble() + 12 * hijriYear.toDouble() - 17048.5)
-                .floorToDouble() +
+            mf.floor(
+              hijriMonth.toDouble() + 12 * hijriYear.toDouble() - 17048.5,
+            ) +
             0.0;
         break;
       case 2:
@@ -893,46 +889,48 @@ class MoonFunction {
     }
 
     double t = k / 1236.85;
+    double t2 = t * t;
+    double t3 = t2 * t;
+    double t4 = t3 * t;
+
     double jdeMMP =
         2451550.09766 +
         29.530588861 * k +
-        0.00015437 * t * t -
-        0.000000150 * t * t * t +
-        0.00000000073 * t * t * t * t;
+        0.00015437 * t2 -
+        0.000000150 * t3 +
+        0.00000000073 * t4;
 
-    double e = 1 - 0.002516 * t - 0.0000074 * t * t;
+    double e = 1 - 0.002516 * t - 0.0000074 * t2;
 
-    double m =
-        2.5534 + 29.1053567 * k - 0.0000014 * t * t - 0.00000011 * t * t * t;
+    double m = 2.5534 + 29.1053567 * k - 0.0000014 * t2 - 0.00000011 * t3;
     m = mf.rad(mf.mod(m, 360));
 
     double mp =
         201.5643 +
         385.81693528 * k +
-        0.0107582 * t * t +
-        0.00001238 * t * t * t -
-        0.000000058 * t * t * t * t;
+        0.0107582 * t2 +
+        0.00001238 * t3 -
+        0.000000058 * t4;
     mp = mf.rad(mf.mod(mp, 360));
 
     double f =
         160.7108 +
         390.67050284 * k -
-        0.0016118 * t * t -
-        0.00000227 * t * t * t +
-        0.000000011 * t * t * t * t;
+        0.0016118 * t2 -
+        0.00000227 * t3 +
+        0.000000011 * t4;
     f = mf.rad(mf.mod(f, 360));
 
-    double omg =
-        124.7746 - 1.56375588 * k + 0.0020672 * t * t + 0.00000215 * t * t * t;
+    double omg = 124.7746 - 1.56375588 * k + 0.0020672 * t2 + 0.00000215 * t3;
     omg = mf.rad(mf.mod(omg, 360));
 
-    if ((math.sin(f)).abs() > 0.36) {
+    if (mf.abs(math.sin(f)) > 0.36) {
       return 0.0;
     } else {
       double f1 = mf.deg(f) - 0.02665 * math.sin(omg);
       f1 = mf.rad(mf.mod(f1, 360));
 
-      double a1 = 299.77 + 0.107408 * k - 0.009173 * t * t;
+      double a1 = 299.77 + 0.107408 * k - 0.009173 * t2;
       a1 = mf.rad(mf.mod(a1, 360));
 
       double jdeCorr;
