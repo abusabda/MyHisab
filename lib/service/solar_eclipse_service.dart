@@ -959,16 +959,16 @@ class SolarEclipseService {
     double durT = (jdSolarU3 - jdSolarU2) * 24.0;
 
     // ================== Data matahari saat maximum=====================
-    double RAS = sn.sunGeocentricRightAscension(jdSolarMx, 0);
-    double DCS = sn.sunGeocentricDeclination(jdSolarMx, 0);
-    double SDS = sn.sunGeocentricSemidiameter(jdSolarMx, 0);
-    double HPS = sn.sunEquatorialHorizontalParallax(jdSolarMx, 0);
+    double raS = sn.sunGeocentricRightAscension(jdSolarMx, 0);
+    double dcS = sn.sunGeocentricDeclination(jdSolarMx, 0);
+    double sdS = sn.sunGeocentricSemidiameter(jdSolarMx, 0);
+    double hpS = sn.sunEquatorialHorizontalParallax(jdSolarMx, 0);
 
     // ================== Data bulan saat maximum=====================
-    double RAM = mo.moonGeocentricRightAscension(jdSolarMx, 0);
-    double DCM = mo.moonGeocentricDeclination(jdSolarMx, 0);
-    double SDM = mo.moonGeocentricSemidiameter(jdSolarMx, 0);
-    double HPM = mo.moonEquatorialHorizontalParallax(jdSolarMx, 0);
+    double raM = mo.moonGeocentricRightAscension(jdSolarMx, 0);
+    double dcM = mo.moonGeocentricDeclination(jdSolarMx, 0);
+    double sdM = mo.moonGeocentricSemidiameter(jdSolarMx, 0);
+    double hpM = mo.moonEquatorialHorizontalParallax(jdSolarMx, 0);
 
     return {
       "JDU1": jdSolarU1,
@@ -982,14 +982,14 @@ class SolarEclipseService {
       "JSE": jSE,
       "DURG": durG,
       "DURT": durT,
-      "RAS": RAS,
-      "DCS": DCS,
-      "SDS": SDS,
-      "HPS": HPS,
-      "RAM": RAM,
-      "DCM": DCM,
-      "SDM": SDM,
-      "HPM": HPM,
+      "RAS": raS,
+      "DCS": dcS,
+      "SDS": sdS,
+      "HPS": hpS,
+      "RAM": raM,
+      "DCM": dcM,
+      "SDM": sdM,
+      "HPM": hpM,
     };
   }
 }

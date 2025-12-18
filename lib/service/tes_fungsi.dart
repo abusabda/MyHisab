@@ -619,7 +619,7 @@ void main() {
             "hto",
           );
           text =
-              "${jd.jdkm(jdVal, tmZn3)} | "
+              "${jd.jdkm(jdVal, tmZn3)} |"
               " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn3, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmU1, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altU1, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
           break;
 
@@ -638,7 +638,7 @@ void main() {
             "hto",
           );
           text =
-              "${jd.jdkm(jdVal, tmZn3)} | "
+              "${jd.jdkm(jdVal, tmZn3)} |"
               " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn3, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmU2, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altU2, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
           break;
 
@@ -657,7 +657,7 @@ void main() {
             "hto",
           );
           text =
-              "${jd.jdkm(jdVal, tmZn3)} | "
+              "${jd.jdkm(jdVal, tmZn3)} |"
               " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn3, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmMX, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altMX, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
           break;
 
@@ -676,7 +676,7 @@ void main() {
             "hto",
           );
           text =
-              "${jd.jdkm(jdVal, tmZn3)} | "
+              "${jd.jdkm(jdVal, tmZn3)} |"
               " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn3, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmU3, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altU3, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
           break;
 
@@ -695,7 +695,7 @@ void main() {
             "hto",
           );
           text =
-              "${jd.jdkm(jdVal, tmZn3)} | "
+              "${jd.jdkm(jdVal, tmZn3)} |"
               " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn3, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmU4, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altU4, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
           break;
 
