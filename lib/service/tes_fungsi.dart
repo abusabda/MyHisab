@@ -551,6 +551,14 @@ void main() {
     "DURT",
     "MAG",
     "OBS",
+    "RAS",
+    "DCS",
+    "SDS",
+    "HPS",
+    "RAM",
+    "DCM",
+    "SDM",
+    "HPM",
   ];
 
   final Map<String, String> eclipseLabel = {
@@ -564,6 +572,14 @@ void main() {
     "DURT": "Durasi Total/Cincin",
     "MAG": "Magnitudo",
     "OBS": "Obskurasi",
+    "RAS": "RAs",
+    "DCS": "DCs",
+    "SDS": "SDs",
+    "HPS": "HPs",
+    "RAM": "RAm",
+    "DCM": "DCm",
+    "SDM": "SDm",
+    "HPM": "HPm",
   };
 
   final result = se.solarEclipseLocal(
@@ -705,6 +721,51 @@ void main() {
         case "OBS":
           // Obskurasi → persen 1 desimal
           text = "${(val as double).toStringAsFixed(1)} %";
+          break;
+
+        case "RAS":
+          // R.A → HH:MM:SS
+          text = mf.dhhms(
+            val / 15 as double,
+            optResult: "HHMMSS",
+            secDecPlaces: 1,
+          );
+          break;
+
+        case "DCS":
+          // Dec → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+
+        case "SDS":
+          // S.D → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+
+        case "HPS":
+          // H.P → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+
+        case "RAM":
+          // R.A → HH:MM:SS
+          text = mf.dhhms(
+            val / 15 as double,
+            optResult: "HHMMSS",
+            secDecPlaces: 1,
+          );
+          break;
+        case "DCM":
+          // Dec → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+        case "SDM":
+          // S.D → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+        case "HPM":
+          // H.P → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
           break;
 
         default:
