@@ -537,8 +537,8 @@ class SolarEclipseService {
     required double tmZn,
   }) {
     // ===================== Variabel =====================
-    double TMx = 0.0;
-    double Pi = 0.0;
+    double tMx = 0.0;
+    double pi = 0.0;
     double S = 0.0;
     double C = 0.0;
     double xMx = 0.0;
@@ -549,7 +549,7 @@ class SolarEclipseService {
     double l2Mx = 0.0;
     double xpMx = 0.0;
     double ypMx = 0.0;
-    double HMx = 0.0;
+    double hMx = 0.0;
     double pMx = 0.0;
     double qMx = 0.0;
     double rMx = 0.0;
@@ -611,66 +611,66 @@ class SolarEclipseService {
     final deltaT = dynamicalTime.deltaT(jde2);
     final t0 = (((jde2 + 0.5) - (jde2 + 0.5).floor()) * 24).roundToDouble();
 
-    TMx += ppMx;
+    tMx += ppMx;
 
     // ===================== Iterasi 5 kali =====================
     for (int i = 1; i <= 5; i++) {
-      Pi = math.atan(0.99664719 * math.tan(mf.rad(gLat)));
+      pi = math.atan(0.99664719 * math.tan(mf.rad(gLat)));
 
-      S = 0.99664719 * math.sin(Pi) + (elev / 6378140) * math.sin(mf.rad(gLat));
-      C = math.cos(Pi) + (elev / 6378140) * math.cos(mf.rad(gLat));
+      S = 0.99664719 * math.sin(pi) + (elev / 6378140) * math.sin(mf.rad(gLat));
+      C = math.cos(pi) + (elev / 6378140) * math.cos(mf.rad(gLat));
 
       xMx =
           x0 +
-          x1 * TMx +
-          x2 * TMx * TMx +
-          x3 * TMx * TMx * TMx +
-          x4 * TMx * TMx * TMx * TMx;
+          x1 * tMx +
+          x2 * tMx * tMx +
+          x3 * tMx * tMx * tMx +
+          x4 * tMx * tMx * tMx * tMx;
       yMx =
           y0 +
-          y1 * TMx +
-          y2 * TMx * TMx +
-          y3 * TMx * TMx * TMx +
-          y4 * TMx * TMx * TMx * TMx;
+          y1 * tMx +
+          y2 * tMx * tMx +
+          y3 * tMx * tMx * tMx +
+          y4 * tMx * tMx * tMx * tMx;
       dMx =
           d0 +
-          d1 * TMx +
-          d2 * TMx * TMx +
-          d3 * TMx * TMx * TMx +
-          d4 * TMx * TMx * TMx * TMx;
+          d1 * tMx +
+          d2 * tMx * tMx +
+          d3 * tMx * tMx * tMx +
+          d4 * tMx * tMx * tMx * tMx;
 
       muMx =
           mu0 +
-          mu1 * TMx +
-          mu2 * TMx * TMx +
-          mu3 * TMx * TMx * TMx +
-          mu4 * TMx * TMx * TMx * TMx;
+          mu1 * tMx +
+          mu2 * tMx * tMx +
+          mu3 * tMx * tMx * tMx +
+          mu4 * tMx * tMx * tMx * tMx;
 
       l1Mx =
           l10 +
-          l11 * TMx +
-          l12 * TMx * TMx +
-          l13 * TMx * TMx * TMx +
-          l14 * TMx * TMx * TMx * TMx;
+          l11 * tMx +
+          l12 * tMx * tMx +
+          l13 * tMx * tMx * tMx +
+          l14 * tMx * tMx * tMx * tMx;
       l2Mx =
           l20 +
-          l21 * TMx +
-          l22 * TMx * TMx +
-          l23 * TMx * TMx * TMx +
-          l24 * TMx * TMx * TMx * TMx;
+          l21 * tMx +
+          l22 * tMx * tMx +
+          l23 * tMx * tMx * tMx +
+          l24 * tMx * tMx * tMx * tMx;
 
-      xpMx = x1 + 2 * x2 * TMx + 3 * x3 * TMx * TMx + 4 * x4 * TMx * TMx * TMx;
-      ypMx = y1 + 2 * y2 * TMx + 3 * y3 * TMx * TMx + 4 * y4 * TMx * TMx * TMx;
+      xpMx = x1 + 2 * x2 * tMx + 3 * x3 * tMx * tMx + 4 * x4 * tMx * tMx * tMx;
+      ypMx = y1 + 2 * y2 * tMx + 3 * y3 * tMx * tMx + 4 * y4 * tMx * tMx * tMx;
 
-      HMx = mf.rad(muMx + gLon - 0.00417807 * deltaT);
+      hMx = mf.rad(muMx + gLon - 0.00417807 * deltaT);
 
-      pMx = C * math.sin(HMx);
+      pMx = C * math.sin(hMx);
       qMx =
-          S * math.cos(mf.rad(dMx)) - C * math.cos(HMx) * math.sin(mf.rad(dMx));
+          S * math.cos(mf.rad(dMx)) - C * math.cos(hMx) * math.sin(mf.rad(dMx));
       rMx =
-          S * math.sin(mf.rad(dMx)) + C * math.cos(HMx) * math.cos(mf.rad(dMx));
+          S * math.sin(mf.rad(dMx)) + C * math.cos(hMx) * math.cos(mf.rad(dMx));
 
-      prMx = 0.01745329 * mu1 * C * math.cos(HMx);
+      prMx = 0.01745329 * mu1 * C * math.cos(hMx);
       qpMx = 0.01745329 * (mu1 * pMx * math.sin(mf.rad(dMx)) - rMx * d1);
 
       uMx = xMx - pMx;
@@ -682,11 +682,11 @@ class SolarEclipseService {
       nMx = aMx * aMx + bMx * bMx;
 
       ppMx = -(uMx * aMx + vMx * bMx) / nMx;
-      TMx += ppMx;
+      tMx += ppMx;
     }
 
     // ===================== Waktu maksimum gerhana =====================
-    aaMx = t0 + TMx - deltaT / 3600.0;
+    aaMx = t0 + tMx - deltaT / 3600.0;
     final jdSolarMx = mf.floor(jde2 + 0.5) - 0.5 + (aaMx / 24.0);
 
     // ===================== Magnitude & Obskurasi =====================
