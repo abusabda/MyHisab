@@ -259,7 +259,7 @@ class LunarEclipseService {
     // =======================================
     // Besselian elements for lunar eclipse
     // =======================================
-    double t = 0.0, t2 = 0.0, t3 = 0.0, t4 = 0.0;
+    double t = 0.0;
     double x = 0.0, y = 0.0, x_ = 0.0, y_ = 0.0;
     double n = 0.0, n2 = 0.0, tx = 0.0;
     double f1 = 0.0, f2 = 0.0;
