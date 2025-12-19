@@ -1,4 +1,4 @@
-import 'package:myhisab/core/dynamical_time.dart';
+//import 'package:myhisab/core/dynamical_time.dart';
 import 'package:myhisab/core/julian_day.dart';
 import 'package:myhisab/core/math_utils.dart';
 import 'package:myhisab/core/moon_function.dart';
@@ -20,7 +20,7 @@ void main() {
   final mf = MathFunction();
   final mo = MoonFunction();
   final sn = SunFunction();
-  final dt = DynamicalTime();
+  //final dt = DynamicalTime();
 
   final waktuSalatHarian = ss.waktuSalatHarian(
     tglM: 1,
@@ -161,10 +161,10 @@ void main() {
   // INPUT GERHANA BULAN
   final blnH2 = 11;
   final thnH2 = 1439;
-  final gLon = 107 + 36 / 60.0 + 0 / 3600.0;
-  final gLat = -(7 + 5 / 60.0 + 0 / 3600.0);
-  final elev = 730.0;
-  double tmZn = 7;
+  final gLon2 = 107 + 36 / 60.0 + 0 / 3600.0;
+  final gLat2 = -(7 + 5 / 60.0 + 0 / 3600.0);
+  final elev2 = 730.0;
+  double tmZn2 = 7;
 
   print("========================================");
   print("        DATA GERHANA BULAN");
@@ -244,211 +244,348 @@ void main() {
     print("${e.padRight(5)} : $valStr");
   }
 
-  // ================================
-  // CETAK JENIS GERHANA
-  // ================================
-  print("\nJenis Gerhana:");
-  final jenisVal = le
-      .lunarEclipse(
-        hijriMonth: blnH2,
-        hijriYear: thnH2,
-        gLon: gLon,
-        gLat: gLat,
-        elev: elev,
-        tmZn: tmZn,
-        optResult: "JenisGerhana",
-      )
-      .toInt();
+  print("========================================");
 
-  String jenisText = switch (jenisVal) {
-    1 => "GERHANA BULAN TOTAL",
-    2 => "GERHANA BULAN SEBAGIAN",
-    3 => "GERHANA BULAN PENUMBRAL",
-    _ => "TIDAK ADA GERHANA",
+  final lunarEclipse = [
+    "JLE",
+    "JDP1",
+    "JDU1",
+    "JDU2",
+    "JDMX",
+    "JDU3",
+    "JDU4",
+    "JDP4",
+    "DURP",
+    "DURU",
+    "DURT",
+    "MAGP",
+    "MAGU",
+    "RADP",
+    "RADU",
+    "RAS",
+    "DCS",
+    "SDS",
+    "HPS",
+    "RAM",
+    "DCM",
+    "SDM",
+    "HPM",
+  ];
+
+  final Map<String, String> lunarEclipseLabel = {
+    "JLE": "Jenis Gerhana",
+    "JDP1": "Awal Penumbra (P1)",
+    "JDU1": "Awal Umbra (U1)",
+    "JDU2": "Awal Total (U2)",
+    "JDMX": "Puncak Gerhana (MX)",
+    "JDU3": "Akhir Total (U3)",
+    "JDU4": "Akhir Umbra(U4)",
+    "JDP4": "Akhir Penumbra (P4)",
+    "DURP": "Durasi Penumbra",
+    "DURU": "Durasi Umbra",
+    "DURT": "Durasi Total",
+    "MAGP": "Magnitudo Penumbra",
+    "MAGU": "Magnitudo Umbra",
+    "RADP": "Radius Penumbra",
+    "RADU": "Radius Umbra",
+    "RAS": "RAs",
+    "DCS": "DCs",
+    "SDS": "SDs",
+    "HPS": "HPs",
+    "RAM": "RAm",
+    "DCM": "DCm",
+    "SDM": "SDm",
+    "HPM": "HPm",
   };
 
-  print("=> $jenisText");
+  final result = le.lunarEclipse(
+    blnH: blnH2,
+    thnH: thnH2,
+    gLon: gLon2,
+    gLat: gLat2,
+    elev: elev2,
+    tmZn: tmZn2,
+  );
 
-  // ================================
-  // CETAK KONTAK GERHANA
-  // ================================
-  print("\nKontak Gerhana (Waktu Lokal):");
+  for (final e in lunarEclipse) {
+    final val = result[e];
+    String text;
 
-  double? jdMax; // simpan JD maksimum (puncak gerhana)
-
-  final kontak = [
-    ["P1", "Awal Penumbra"],
-    ["U1", "Awal Sebagian"],
-    ["U2", "Awal Total"],
-    ["Mx", "Puncak Gerhana"],
-    ["U3", "Akhir Total"],
-    ["U4", "Akhir Sebagian"],
-    ["P4", "Akhir Penumbra"],
-  ];
-
-  for (var k in kontak) {
-    final fase = k[0];
-    final label = k[1];
-
-    // Ambil JD hasil kontak
-    final jdVal = le.lunarEclipse(
-      hijriMonth: blnH2,
-      hijriYear: thnH2,
-      gLon: gLon,
-      gLat: gLat,
-      elev: elev,
-      tmZn: tmZn,
-      optResult: fase,
-    );
-
-    // Simpan JD maksimum (puncak gerhana)
-    if (fase == "Mx") jdMax = jdVal;
-
-    if (jdVal.isNaN || jdVal == 0.0) {
-      print("${label.padRight(20)} : -");
-      continue;
-    }
-
-    // Konversi JD → tanggal dan jam
-    final tgl = jd.jdkm(jdVal, tmZn);
-    final jamDes = double.parse(jd.jdkm(jdVal, tmZn, "Jam Des"));
-    final detikDesimal = (fase == "Mx")
-        ? mf.dhhms(jamDes, optResult: "HH:MM:SS", secDecPlaces: 1)
-        : mf.dhhms(jamDes, optResult: "HH:MM:SS", secDecPlaces: 0);
-
-    final dltT = dt.deltaT(jdVal);
-
-    // Hitung azimut (satu kali saja, ringan)
-    final azmVal = mo.moonTopocentricAzimuth(jdVal, dltT, gLon, gLat, elev);
-    final altVal = mo.moonTopocentricAltitude(
-      jdVal,
-      dltT,
-      gLon,
-      gLat,
-      elev,
-      1010.0,
-      10.0,
-      "htoc",
-    );
-
-    // Gabungkan tanggal + jam dan ratakan panjang kolomnya
-    final waktuText = "$tgl | Jam: $detikDesimal";
-    // panjang kolom waktu disamakan (misal 50 karakter)
-    final waktuPad = waktuText.padRight(40);
-
-    // Format kolom azimut, beri 2 spasi tambahan di awal untuk rapih
-    final azmText = (azmVal.isNaN || azmVal == 0.0)
-        ? ""
-        : "  | Azm: ${mf.dddms(azmVal, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
-    //: "  | Azm: ${azmVal.toStringAsFixed(1).padLeft(0)}°";
-
-    final altText = (altVal.isNaN || altVal == 0.0)
-        ? ""
-        : "  | Alt: ${mf.dddms(altVal, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
-    //: "  | Alt: ${altVal.toStringAsFixed(1).padLeft(0)}°";
-
-    print("${label.padRight(20)} : $waktuPad $azmText $altText");
-  }
-
-  print(" ");
-
-  final dataGerhana = [
-    ["MagP", "Magnitudo Penumbra"],
-    ["MagU", "Magnitudo Umbra"],
-    ["RadP", "Radius Penumbra"],
-    ["RadU", "Radius Umbra"],
-    ["DurP", "Durasi Penumbra"],
-    ["DurU", "Durasi Umbra"],
-    ["DurT", "Durasi Total"],
-  ];
-
-  for (var d in dataGerhana) {
-    final jdVal = le.lunarEclipse(
-      hijriMonth: blnH2,
-      hijriYear: thnH2,
-      gLon: gLon,
-      gLat: gLat,
-      elev: elev,
-      tmZn: tmZn,
-      optResult: d[0],
-    );
-
-    // Nama parameter misalnya "DurP", "DurU", "DurT", "P1", dst.
-    final nama = d[1].padRight(20);
-
-    if (jdVal.isNaN || jdVal == 0.0) {
-      print("$nama : -");
+    if (val == null || (val is double && val.isNaN) || val == 0.0) {
+      text = "-";
     } else {
-      // --- Aturan tambahan ---
-      String valStr;
+      switch (e) {
+        case "JLE":
+          // Jenis gerhana → teks
+          text = val.toString();
+          break;
 
-      if (d[0] == "DurP" || d[0] == "DurU" || d[0] == "DurT") {
-        // Format durasi jam-menit-detik
-        valStr = mf.dhhms(jdVal, optResult: "HH:MM:SS", secDecPlaces: 0);
-      } else {
-        // Format default (bilangan biasa)
-        valStr = jdVal.toStringAsFixed(7);
+        case "JDP1":
+          // Tanggal & Jam P1
+          final jdVal = val;
+          final azmP1 = mo.moonTopocentricAzimuth(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+          );
+          final altP1 = mo.moonTopocentricAltitude(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+            1010.0,
+            10.0,
+            "htoc",
+          );
+          text =
+              "${jd.jdkm(jdVal, tmZn2)} |"
+              " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn2, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmP1, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altP1, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
+          break;
+
+        case "JDU1":
+          // Tanggal & Jam U1
+          final jdVal = val;
+          final azmU1 = mo.moonTopocentricAzimuth(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+          );
+          final altU1 = mo.moonTopocentricAltitude(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+            1010.0,
+            10.0,
+            "htoc",
+          );
+          text =
+              "${jd.jdkm(jdVal, tmZn2)} |"
+              " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn2, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmU1, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altU1, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
+          break;
+
+        case "JDU2":
+          // Tanggal & Jam U2
+          final jdVal = val as double;
+          final azmU2 = mo.moonTopocentricAzimuth(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+          );
+          final altU2 = mo.moonTopocentricAltitude(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+            1010.0,
+            10.0,
+            "htoc",
+          );
+          text =
+              "${jd.jdkm(jdVal, tmZn2)} |"
+              " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn2, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmU2, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altU2, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
+          break;
+
+        case "JDMX":
+          // Tanggal & Jam puncak gerhana
+          final jdVal = val;
+          final azmMX = mo.moonTopocentricAzimuth(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+          );
+          final altMX = mo.moonTopocentricAltitude(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+            1010.0,
+            10.0,
+            "htoc",
+          );
+          text =
+              "${jd.jdkm(jdVal, tmZn2)} |"
+              " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn2, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmMX, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altMX, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
+          break;
+
+        case "JDU3":
+          // Tanggal & Jam U3
+          final jdVal = val as double;
+          final azmU3 = mo.moonTopocentricAzimuth(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+          );
+          final altU3 = mo.moonTopocentricAltitude(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+            1010.0,
+            10.0,
+            "htoc",
+          );
+          text =
+              "${jd.jdkm(jdVal, tmZn2)} |"
+              " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn2, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmU3, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altU3, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
+          break;
+
+        case "JDU4":
+          // Tanggal & Jam U3
+          final jdVal = val as double;
+          final azmU4 = mo.moonTopocentricAzimuth(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+          );
+          final altU4 = mo.moonTopocentricAltitude(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+            1010.0,
+            10.0,
+            "htoc",
+          );
+          text =
+              "${jd.jdkm(jdVal, tmZn2)} |"
+              " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn2, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmU4, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altU4, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
+          break;
+
+        case "JDP4":
+          // Tanggal & Jam U1
+          final jdVal = val as double;
+          final azmP4 = mo.moonTopocentricAzimuth(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+          );
+          final altP4 = mo.moonTopocentricAltitude(
+            jdVal,
+            0,
+            gLon2,
+            gLat2,
+            elev2,
+            1010.0,
+            10.0,
+            "htoc",
+          );
+          text =
+              "${jd.jdkm(jdVal, tmZn2)} |"
+              " jam : ${mf.dhhms(double.parse(jd.jdkm(jdVal, tmZn2, "Jam Des")), optResult: "HH:MM:SS", secDecPlaces: 0)} | Azm: ${mf.dddms(azmP4, optResult: "DDMMSS", sdp: 0, posNegSign: "")} | Alt: ${mf.dddms(altP4, optResult: "DDMMSS", sdp: 0, posNegSign: "")}";
+          break;
+
+        case "DURP":
+          // Durasi Gerhana
+          text = mf.dhhms(
+            val as double,
+            optResult: "HH:MM:SS",
+            secDecPlaces: 0,
+          );
+          break;
+
+        case "DURU":
+          // Durasi Total/Cincin
+          text = mf.dhhms(val, optResult: "HH:MM:SS", secDecPlaces: 0);
+          break;
+
+        case "DURT":
+          // Durasi Total/Cincin
+          text = mf.dhhms(val, optResult: "HH:MM:SS", secDecPlaces: 0);
+          break;
+
+        case "MAGP":
+          // Magnitudo
+          text = (val as double).toStringAsFixed(3);
+          break;
+
+        case "MAGU":
+          // Magnitudo
+          text = (val as double).toStringAsFixed(3);
+          break;
+
+        case "RADP":
+          // Radius Penumbra
+          text = (val as double).toStringAsFixed(3);
+          break;
+
+        case "RADU":
+          // Radius Umbra
+          text = (val as double).toStringAsFixed(3);
+          break;
+
+        case "RAS":
+          // R.A → HH:MM:SS
+          text = mf.dhhms(
+            val / 15 as double,
+            optResult: "HHMMSS",
+            secDecPlaces: 1,
+          );
+          break;
+
+        case "DCS":
+          // Dec → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+
+        case "SDS":
+          // S.D → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+
+        case "HPS":
+          // H.P → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+
+        case "RAM":
+          // R.A → HH:MM:SS
+          text = mf.dhhms(
+            val / 15 as double,
+            optResult: "HHMMSS",
+            secDecPlaces: 1,
+          );
+          break;
+        case "DCM":
+          // Dec → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+        case "SDM":
+          // S.D → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+        case "HPM":
+          // H.P → DD:MM:SS
+          text = mf.dddms(val as double, optResult: "DDMMSS", sdp: 1);
+          break;
+
+        default:
+          text = val.toString();
       }
-
-      print("$nama : $valStr");
     }
-  }
 
-  if (jdMax != null && !jdMax.isNaN && jdMax != 0.0) {
-    final jdMx = jdMax;
-    final delT = dt.deltaT(jdMx);
-
-    // ===================== Matahari =====================
-    final arSun = sn.sunGeocentricRightAscension(jdMx, delT) / 15;
-    final deSun = sn.sunGeocentricDeclination(jdMx, delT);
-    final sdSun = sn.sunGeocentricSemidiameter(jdMx, delT);
-    final hpSun = sn.sunEquatorialHorizontalParallax(jdMx, delT);
-
-    // ===================== Bulan =====================
-    final arMoon = mo.moonGeocentricRightAscension(jdMx, delT) / 15;
-    final deMoon = mo.moonGeocentricDeclination(jdMx, delT);
-    final sdMoon = mo.moonGeocentricSemidiameter(jdMx, delT);
-    final hpMoon = mo.moonEquatorialHorizontalParallax(jdMx, delT);
-
-    print("\nData Matahari pada saat Puncak Gerhana:");
-    print(
-      "${'R.A'.padRight(5)}: ${mf.dhhms(arSun, optResult: "HHMMSS", secDecPlaces: 1)}",
-    );
-    print(
-      "${'Dec'.padRight(5)}: ${mf.dddms(deSun, optResult: "DD:MM:SS", sdp: 1)}",
-    );
-    print(
-      "${'S.D'.padRight(5)}: ${mf.dddms(sdSun, optResult: "DD:MM:SS", sdp: 1)}",
-    );
-    print(
-      "${'H.P'.padRight(5)}: ${mf.dddms(hpSun, optResult: "DD:MM:SS", sdp: 1)}",
-    );
-
-    print("\nData Bulan pada saat Puncak Gerhana:");
-    print(
-      "${'R.A'.padRight(5)}: ${mf.dhhms(arMoon, optResult: "HHMMSS", secDecPlaces: 1)}",
-    );
-    print(
-      "${'Dec'.padRight(5)}: ${mf.dddms(deMoon, optResult: "DD:MM:SS", sdp: 1)}",
-    );
-    print(
-      "${'S.D'.padRight(5)}: ${mf.dddms(sdMoon, optResult: "DD:MM:SS", sdp: 1)}",
-    );
-    print(
-      "${'H.P'.padRight(5)}: ${mf.dddms(hpMoon, optResult: "DD:MM:SS", sdp: 1)}",
-    );
-  } else {
-    print("\nData Matahari pada saat Puncak Gerhana:");
-    print("${'R.A'.padRight(5)}: -");
-    print("${'Dec'.padRight(5)}: -");
-    print("${'S.D'.padRight(5)}: -");
-    print("${'H.P'.padRight(5)}: -");
-
-    print("\nData Bulan pada saat Puncak Gerhana:");
-    print("${'R.A'.padRight(5)}: -");
-    print("${'Dec'.padRight(5)}: -");
-    print("${'S.D'.padRight(5)}: -");
-    print("${'H.P'.padRight(5)}: -");
+    // 🔹 Print dengan label panjang
+    print("${lunarEclipseLabel[e]!.padRight(25)} : $text");
   }
 
   print("========================================");
@@ -561,7 +698,7 @@ void main() {
     "HPM",
   ];
 
-  final Map<String, String> eclipseLabel = {
+  final Map<String, String> solarEclipseLabel = {
     "JSE": "Jenis Gerhana",
     "JDU1": "Awal Gerhana (U1)",
     "JDU2": "Awal Total/Cincin (U2)",
@@ -582,7 +719,7 @@ void main() {
     "HPM": "HPm",
   };
 
-  final result = se.solarEclipseLocal(
+  final result3 = se.solarEclipseLocal(
     blnH: blnH3,
     thnH: thnH3,
     gLon: gLon3,
@@ -592,7 +729,7 @@ void main() {
   );
 
   for (final e in solarEclipse) {
-    final val = result[e];
+    final val = result3[e];
     String text;
 
     if (val == null || (val is double && val.isNaN) || val == 0.0) {
@@ -774,6 +911,6 @@ void main() {
     }
 
     // 🔹 Print dengan label panjang
-    print("${eclipseLabel[e]!.padRight(25)} : $text");
+    print("${solarEclipseLabel[e]!.padRight(25)} : $text");
   }
 }

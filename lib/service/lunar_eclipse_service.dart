@@ -248,14 +248,13 @@ class LunarEclipseService {
     }
   }
 
-  double lunarEclipse({
-    required int hijriMonth,
-    required int hijriYear,
+  Map<String, dynamic> lunarEclipse({
+    required int blnH,
+    required int thnH,
     required double gLon,
     required double gLat,
     required double elev,
     required double tmZn,
-    required String optResult,
   }) {
     // =======================================
     // Besselian elements for lunar eclipse
@@ -263,61 +262,61 @@ class LunarEclipseService {
     double t = 0.0, t2 = 0.0, t3 = 0.0, t4 = 0.0;
     double x = 0.0, y = 0.0, x_ = 0.0, y_ = 0.0;
     double n = 0.0, n2 = 0.0, tx = 0.0;
+    double f1 = 0.0, f2 = 0.0;
+    double sm = 0.0;
 
-    double jdl = lBesselian(hijriMonth, hijriYear, "JDL");
-    double dt = lBesselian(hijriMonth, hijriYear, "DT");
+    // double jdl = lBesselian(blnH, thnH, "JDL");
+    double dt = lBesselian(blnH, thnH, "DT");
 
-    double x0 = lBesselian(hijriMonth, hijriYear, "x0");
-    double x1 = lBesselian(hijriMonth, hijriYear, "x1");
-    double x2 = lBesselian(hijriMonth, hijriYear, "x2");
-    double x3 = lBesselian(hijriMonth, hijriYear, "x3");
-    double x4 = lBesselian(hijriMonth, hijriYear, "x4");
+    double x0 = lBesselian(blnH, thnH, "x0");
+    double x1 = lBesselian(blnH, thnH, "x1");
+    double x2 = lBesselian(blnH, thnH, "x2");
+    double x3 = lBesselian(blnH, thnH, "x3");
+    double x4 = lBesselian(blnH, thnH, "x4");
 
-    double y0 = lBesselian(hijriMonth, hijriYear, "y0");
-    double y1 = lBesselian(hijriMonth, hijriYear, "y1");
-    double y2 = lBesselian(hijriMonth, hijriYear, "y2");
-    double y3 = lBesselian(hijriMonth, hijriYear, "y3");
-    double y4 = lBesselian(hijriMonth, hijriYear, "y4");
+    double y0 = lBesselian(blnH, thnH, "y0");
+    double y1 = lBesselian(blnH, thnH, "y1");
+    double y2 = lBesselian(blnH, thnH, "y2");
+    double y3 = lBesselian(blnH, thnH, "y3");
+    double y4 = lBesselian(blnH, thnH, "y4");
 
-    double d0 = lBesselian(hijriMonth, hijriYear, "d0");
-    double d1 = lBesselian(hijriMonth, hijriYear, "d1");
-    double d2 = lBesselian(hijriMonth, hijriYear, "d2");
-    double d3 = lBesselian(hijriMonth, hijriYear, "d3");
-    double d4 = lBesselian(hijriMonth, hijriYear, "d4");
+    //double d0 = lBesselian(blnH, thnH, "d0");
+    // double d1 = lBesselian(blnH, thnH, "d1");
+    // double d2 = lBesselian(blnH, thnH, "d2");
+    // double d3 = lBesselian(blnH, thnH, "d3");
+    // double d4 = lBesselian(blnH, thnH, "d4");
 
-    double f10 = lBesselian(hijriMonth, hijriYear, "f10");
-    double f11 = lBesselian(hijriMonth, hijriYear, "f11");
-    double f12 = lBesselian(hijriMonth, hijriYear, "f12");
-    double f13 = lBesselian(hijriMonth, hijriYear, "f13");
-    double f14 = lBesselian(hijriMonth, hijriYear, "f14");
+    double f10 = lBesselian(blnH, thnH, "f10");
+    double f11 = lBesselian(blnH, thnH, "f11");
+    double f12 = lBesselian(blnH, thnH, "f12");
+    double f13 = lBesselian(blnH, thnH, "f13");
+    double f14 = lBesselian(blnH, thnH, "f14");
 
-    double f20 = lBesselian(hijriMonth, hijriYear, "f20");
-    double f21 = lBesselian(hijriMonth, hijriYear, "f21");
-    double f22 = lBesselian(hijriMonth, hijriYear, "f22");
-    double f23 = lBesselian(hijriMonth, hijriYear, "f23");
-    double f24 = lBesselian(hijriMonth, hijriYear, "f24");
+    double f20 = lBesselian(blnH, thnH, "f20");
+    double f21 = lBesselian(blnH, thnH, "f21");
+    double f22 = lBesselian(blnH, thnH, "f22");
+    double f23 = lBesselian(blnH, thnH, "f23");
+    double f24 = lBesselian(blnH, thnH, "f24");
 
-    double hp0 = lBesselian(hijriMonth, hijriYear, "HP0");
-    double hp1 = lBesselian(hijriMonth, hijriYear, "HP1");
-    double hp2 = lBesselian(hijriMonth, hijriYear, "HP2");
-    double hp3 = lBesselian(hijriMonth, hijriYear, "HP3");
-    double hp4 = lBesselian(hijriMonth, hijriYear, "HP4");
+    // double hp0 = lBesselian(blnH, thnH, "HP0");
+    // double hp1 = lBesselian(blnH, thnH, "HP1");
+    // double hp2 = lBesselian(blnH, thnH, "HP2");
+    // double hp3 = lBesselian(blnH, thnH, "HP3");
+    // double hp4 = lBesselian(blnH, thnH, "HP4");
 
-    double dm0 = lBesselian(hijriMonth, hijriYear, "dm0");
-    double dm1 = lBesselian(hijriMonth, hijriYear, "dm1");
-    double dm2 = lBesselian(hijriMonth, hijriYear, "dm2");
-    double dm3 = lBesselian(hijriMonth, hijriYear, "dm3");
-    double dm4 = lBesselian(hijriMonth, hijriYear, "dm4");
+    // double dm0 = lBesselian(blnH, thnH, "dm0");
+    // double dm1 = lBesselian(blnH, thnH, "dm1");
+    // double dm2 = lBesselian(blnH, thnH, "dm2");
+    // double dm3 = lBesselian(blnH, thnH, "dm3");
+    // double dm4 = lBesselian(blnH, thnH, "dm4");
 
-    double sm0 = lBesselian(hijriMonth, hijriYear, "Sm0");
-    double sm1 = lBesselian(hijriMonth, hijriYear, "Sm1");
-    double sm2 = lBesselian(hijriMonth, hijriYear, "Sm2");
-    double sm3 = lBesselian(hijriMonth, hijriYear, "Sm3");
-    double sm4 = lBesselian(hijriMonth, hijriYear, "Sm4");
+    double sm0 = lBesselian(blnH, thnH, "Sm0");
+    double sm1 = lBesselian(blnH, thnH, "Sm1");
+    double sm2 = lBesselian(blnH, thnH, "Sm2");
+    double sm3 = lBesselian(blnH, thnH, "Sm3");
+    double sm4 = lBesselian(blnH, thnH, "Sm4");
 
-    double jdE1 = mo.jdeEclipseModified(hijriMonth, hijriYear, 2);
-    if (jdE1 <= 0) return 0.0;
-
+    double jdE1 = mo.jdeEclipseModified(blnH, thnH, 2);
     double jdE2 =
         (mf.floor(jdE1)) +
         (((jdE1 - mf.floor(jdE1)) * 24).roundToDouble()) / 24.0;
@@ -330,17 +329,18 @@ class LunarEclipseService {
     // =======================================
     // Iterasi koreksi T, X, Y
     // =======================================
-    for (int i = 1; i <= 4; i++) {
+    for (int i = 1; i <= 3; i++) {
       t += tx;
-      t2 = t * t;
-      t3 = t2 * t;
-      t4 = t3 * t;
 
-      x = x0 + x1 * t + x2 * t2 + x3 * t3 + x4 * t4;
-      y = y0 + y1 * t + y2 * t2 + y3 * t3 + y4 * t4;
+      x = x0 + x1 * t + x2 * t * t + x3 * t * t * t + x4 * t * t * t * t;
+      y = y0 + y1 * t + y2 * t * t + y3 * t * t * t + y4 * t * t * t * t;
 
-      x_ = x1 + 2 * x2 * t + 3 * x3 * t2 + 4 * x4 * t3;
-      y_ = y1 + 2 * y2 * t + 3 * y3 * t2 + 4 * y4 * t3;
+      x_ = x1 + 2 * x2 * t + 3 * x3 * t * t + 4 * x4 * t * t * t;
+      y_ = y1 + 2 * y2 * t + 3 * y3 * t * t + 4 * y4 * t * t * t;
+
+      f1 = f10 + f11 * t + f12 * t * t + f13 * t * t * t + f14 * t * t * t * t;
+      f2 = f20 + f21 * t + f22 * t * t + f23 * t * t * t + f24 * t * t * t * t;
+      sm = sm0 + sm1 * t + sm2 * t * t + sm3 * t * t * t + sm4 * t * t * t * t;
 
       n2 = x_ * x_ + y_ * y_;
       n = math.sqrt(n2);
@@ -350,9 +350,6 @@ class LunarEclipseService {
     // =======================================
     // Besselian coefficients untuk f, sm
     // =======================================
-    double f1 = f10 + f11 * t + f12 * t2 + f13 * t3 + f14 * t4;
-    double f2 = f20 + f21 * t + f22 * t2 + f23 * t3 + f24 * t4;
-    double sm = sm0 + sm1 * t + sm2 * t2 + sm3 * t3 + sm4 * t4;
 
     double d = math.sqrt(x * x + y * y);
 
@@ -377,7 +374,7 @@ class LunarEclipseService {
     // =======================================
     // Julian Day berbagai fase
     // =======================================
-    double jdBase = mf.floor(jdE2 - 0.5) + 0.5;
+    double jdBase = mf.floor(jdE2 + 0.5) - 0.5;
     double p1 = jdBase + ((t0 + t - tm1) / 24.0) - dt / 86400.0;
     double u1 = jdBase + ((t0 + t - tm2) / 24.0) - dt / 86400.0;
     double u2 = jdBase + ((t0 + t - tm3) / 24.0) - dt / 86400.0;
@@ -387,143 +384,57 @@ class LunarEclipseService {
     double p4 = jdBase + ((t0 + t + tm1) / 24.0) - dt / 86400.0;
 
     // Menentukan jenis gerhana Bulan
-    double lek;
+    String jLE;
     if (l3 * l3 - d * d > 0.0) {
-      lek = 1; //"GERHANA BULAN TOTAL";
+      jLE = "GERHANA BULAN TOTAL";
     } else if (l2 * l2 - d * d > 0.0 && l3 * l3 - d * d < 0.0) {
-      lek = 2; //"GERHANA BULAN SEBAGIAN";
+      jLE = "GERHANA BULAN SEBAGIAN";
     } else if (l1 * l1 - d * d > 0.0 && l2 * l2 - d * d < 0.0) {
-      lek = 3; //"GERHANA BULAN PENUMBRAL";
+      jLE = "GERHANA BULAN PENUMBRAL";
     } else {
-      lek = 0; //"TIDAK ADA GERHANA";
+      jLE = "TIDAK ADA GERHANA";
     }
+
+    // ================== Data matahari saat maximum=====================
+    double raS = sn.sunGeocentricRightAscension(mx, dt);
+    double dcS = sn.sunGeocentricDeclination(mx, dt);
+    double sdS = sn.sunGeocentricSemidiameter(mx, dt);
+    double hpS = sn.sunEquatorialHorizontalParallax(mx, dt);
+
+    // ================== Data bulan saat maximum=====================
+    double raM = mo.moonGeocentricRightAscension(mx, dt);
+    double dcM = mo.moonGeocentricDeclination(mx, dt);
+    double sdM = mo.moonGeocentricSemidiameter(mx, dt);
+    double hpM = mo.moonEquatorialHorizontalParallax(mx, dt);
 
     // =======================================
     // Return berdasarkan OptResult
     // =======================================
-    switch (optResult) {
-      case "JenisGerhana":
-        return lek;
-      case "JDL":
-        return jdl;
-      case "DT":
-        return dt;
-      case "T0":
-        return t0;
 
-      case "x0":
-        return x0;
-      case "x1":
-        return x1;
-      case "x2":
-        return x2;
-      case "x3":
-        return x3;
-      case "x4":
-        return x4;
-      case "y0":
-        return y0;
-      case "y1":
-        return y1;
-      case "y2":
-        return y2;
-      case "y3":
-        return y3;
-      case "y4":
-        return y4;
-      case "d0":
-        return d0;
-      case "d1":
-        return d1;
-      case "d2":
-        return d2;
-      case "d3":
-        return d3;
-      case "d4":
-        return d4;
-      case "f10":
-        return f10;
-      case "f11":
-        return f11;
-      case "f12":
-        return f12;
-      case "f13":
-        return f13;
-      case "f14":
-        return f14;
-      case "f20":
-        return f20;
-      case "f21":
-        return f21;
-      case "f22":
-        return f22;
-      case "f23":
-        return f23;
-      case "f24":
-        return f24;
-      case "HP0":
-        return hp0;
-      case "HP1":
-        return hp1;
-      case "HP2":
-        return hp2;
-      case "HP3":
-        return hp3;
-      case "HP4":
-        return hp4;
-      case "dm0":
-        return dm0;
-      case "dm1":
-        return dm1;
-      case "dm2":
-        return dm2;
-      case "dm3":
-        return dm3;
-      case "dm4":
-        return dm4;
-      case "Sm0":
-        return sm0;
-      case "Sm1":
-        return sm1;
-      case "Sm2":
-        return sm2;
-      case "Sm3":
-        return sm3;
-      case "Sm4":
-        return sm4;
-
-      case "P1":
-        return p1;
-      case "P4":
-        return p4;
-      case "U1":
-        return u1;
-      case "U4":
-        return u4;
-      case "U2":
-        return u2;
-      case "U3":
-        return u3;
-
-      case "MagP":
-        return magP;
-      case "MagU":
-        return magU;
-
-      case "RadP":
-        return radP;
-      case "RadU":
-        return radU;
-
-      case "DurP":
-        return durP;
-      case "DurU":
-        return durU;
-      case "DurT":
-        return durT;
-
-      default:
-        return mx;
-    }
+    return {
+      "JDP1": p1,
+      "JDU1": u1,
+      "JDU2": u2,
+      "JDMX": mx,
+      "JDU3": u3,
+      "JDU4": u4,
+      "JDP4": p4,
+      "DURP": durP,
+      "DURU": durU,
+      "DURT": durT,
+      "MAGP": magP,
+      "MAGU": magU,
+      "RADP": radP,
+      "RADU": radU,
+      "JLE": jLE,
+      "RAS": raS,
+      "DCS": dcS,
+      "SDS": sdS,
+      "HPS": hpS,
+      "RAM": raM,
+      "DCM": dcM,
+      "SDM": sdM,
+      "HPM": hpM,
+    };
   }
 }
